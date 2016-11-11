@@ -1,0 +1,44 @@
+#include <stdarg.h>
+#include <stddef.h>
+#include <setjmp.h>
+#include <cmocka.h>
+
+/* Libre Headers */
+#include "../main/inc/dataCalculation.h"
+#include "../main/inc/outputPlotter.h"
+#include "../main/inc/scalerDefines.h"
+
+/* A test case that does nothing and succeeds. */
+static void null_test_success(void **state) {
+    (void) state; /* unused */
+}
+
+/* Test accuracy of math with ideal gas law .
+*  I'm not sure what the best way is, maybe we can use double type variables and compare the results with our fixed-point math?
+*/
+static void testIGLScales(void **state) {
+  (void) state; /* unused */
+
+  SyncedADCReadings mockSyncedADCReadings;
+  
+  mockSyncedADCReadings.MAP = KPA(500);
+  uint32_t airCharge;
+  calculateAirCharge(&mockSyncedADCReadings, &airCharge);
+
+  printf("\nScaled Aircharge is %u grams.", airCharge); 
+  //TODO figure out what needs to be asserted
+  //assert_int_equal(divide(10, 2), 5);  
+  //assert_int_equal(divide(2, 10), 0);
+  // greater than
+  // less than 
+  // etc
+}
+
+int main(void) {
+    const UnitTest tests[] = {
+        unit_test(null_test_success),
+        unit_test(testIGLScales)
+    };
+
+    return run_tests(tests);
+}
