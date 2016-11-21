@@ -19,7 +19,7 @@ The best way to get the latest development firmware is from the [build server!](
 
 If you want to build your own firmware for some reason such as customisations, read below.
 
-Ensure that you have the latest release or latest code from the [github repository](https://git.libreems.org/libreems-suite/libreems-firmware.git).
+Ensure that you have the latest release or latest code from the [gitlab repository](https://gitlab.com/libreems-suite/libreems-firmware.git).
 
 We have pre-packed debian/ubuntu toolchain binaries available at the [apt repository site](https://apt.libreems.org).
 
