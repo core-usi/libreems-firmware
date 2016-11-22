@@ -53,6 +53,16 @@ typedef struct {
 #define WINDOW_SEVEN_COUNT   (30)
 #define WINDOW_EIGHT_COUNT   (65)
 
+#define WINDOW_ONE_SYNC_COUNT    (25)
+#define WINDOW_TWO_SYNC_COUNT    (65)
+#define WINDOW_THREE_SYNC_COUNT  (30)
+#define WINDOW_FOUR_SYNC_COUNT   (60)
+#define WINDOW_FIVE_SYNC_COUNT   (35)
+#define WINDOW_SIX_SYNC_COUNT    (55)
+#define WINDOW_SEVEN_SYNC_COUNT  (40)
+#define WINDOW_EIGHT_SYNC_COUNT  (50)
+
+
 /* Total window counts when starting from 0 */
 #define INDEX_ONE_TOTAL   (WINDOW_ONE_COUNT)
 #define INDEX_TWO_TOTAL   (INDEX_ONE_TOTAL   + WINDOW_TWO_COUNT)
@@ -82,17 +92,18 @@ static uint16_t      previousPrimaryTicksPerDegree;
 typedef struct {
   uint8_t windowCount;
   uint8_t primaryEventIndex;
+  uint8_t windowCountSynced;
 }SyncPosition;
 
 const SyncPosition inputWindows[] = {
-    {.windowCount = WINDOW_ONE_COUNT,   .primaryEventIndex = DEGREE_TO_INDEX(INDEX_ONE_TOTAL) },
-    {.windowCount = WINDOW_TWO_COUNT,   .primaryEventIndex = DEGREE_TO_INDEX(INDEX_TWO_TOTAL) },
-    {.windowCount = WINDOW_THREE_COUNT, .primaryEventIndex = DEGREE_TO_INDEX(INDEX_THREE_TOTAL) },
-    {.windowCount = WINDOW_FOUR_COUNT,  .primaryEventIndex = DEGREE_TO_INDEX(INDEX_FOUR_TOTAL) },
-    {.windowCount = WINDOW_FIVE_COUNT,  .primaryEventIndex = DEGREE_TO_INDEX(INDEX_FIVE_TOTAL) },
-    {.windowCount = WINDOW_SIX_COUNT,   .primaryEventIndex = DEGREE_TO_INDEX(INDEX_SIX_TOTAL) },
-    {.windowCount = WINDOW_SEVEN_COUNT, .primaryEventIndex = DEGREE_TO_INDEX(INDEX_SEVEN_TOTAL) },
-    {.windowCount = WINDOW_EIGHT_COUNT, .primaryEventIndex = DEGREE_TO_INDEX(INDEX_EIGHT_TOTAL) }
+    {.windowCount = WINDOW_ONE_COUNT,   .primaryEventIndex = DEGREE_TO_INDEX(INDEX_ONE_TOTAL),   .windowCountSynced = WINDOW_ONE_SYNC_COUNT    },
+    {.windowCount = WINDOW_TWO_COUNT,   .primaryEventIndex = DEGREE_TO_INDEX(INDEX_TWO_TOTAL),   .windowCountSynced = WINDOW_TWO_SYNC_COUNT    },
+    {.windowCount = WINDOW_THREE_COUNT, .primaryEventIndex = DEGREE_TO_INDEX(INDEX_THREE_TOTAL), .windowCountSynced = WINDOW_THREE_SYNC_COUNT  },
+    {.windowCount = WINDOW_FOUR_COUNT,  .primaryEventIndex = DEGREE_TO_INDEX(INDEX_FOUR_TOTAL),  .windowCountSynced = WINDOW_FOUR_SYNC_COUNT   },
+    {.windowCount = WINDOW_FIVE_COUNT,  .primaryEventIndex = DEGREE_TO_INDEX(INDEX_FIVE_TOTAL),  .windowCountSynced = WINDOW_FIVE_SYNC_COUNT   },
+    {.windowCount = WINDOW_SIX_COUNT,   .primaryEventIndex = DEGREE_TO_INDEX(INDEX_SIX_TOTAL),   .windowCountSynced = WINDOW_SIX_SYNC_COUNT    },
+    {.windowCount = WINDOW_SEVEN_COUNT, .primaryEventIndex = DEGREE_TO_INDEX(INDEX_SEVEN_TOTAL), .windowCountSynced = WINDOW_SEVEN_SYNC_COUNT  },
+    {.windowCount = WINDOW_EIGHT_COUNT, .primaryEventIndex = DEGREE_TO_INDEX(INDEX_EIGHT_TOTAL), .windowCountSynced = WINDOW_EIGHT_SYNC_COUNT  }
 };
 
 void decoderSpecificInit() {
@@ -106,8 +117,9 @@ void decoderSpecificInit() {
   ROUTE_INTERRUPT(0x77, S12X_INTERRUPT, S12X_PRIORITY_LEVEL_SEVEN);
 
   memset(&decoderStats_g, 0, sizeof(decoderStats_g));
-  ICPAR |= (1 << 3); // set the second bit in ICPAR (PAC1) to enable PT1's pulse accumulator
-  //Disable capture on TC0 by making it an output
+  /* Set the second bit in ICPAR (PAC1) to enable PT3's pulse accumulator */
+  ICPAR |= (1 << 3);
+  /* Disable capture on TC0 by making it an output */
   TIOS |= (1 << 0);
   /* Disable INT on TC0 */
   TIE &= ~(uint8_t)(1 << 0);
@@ -117,9 +129,16 @@ void decoderSpecificInit() {
 }
 
 void decoderReset() {
+  /* Disable INT on TC0 */
+  TIE &= ~(uint8_t)(1 << 0);
+
+  /* Clear INT flag */
+  TFLG1 = C0F;
+
+  internalFlags_s.lastWindowMatch = 0;
 }
 
-/* An alternative to having this run at a high priority would be to have it
+/* An alternative to having this run at a high S12 priority would be to have it
  * run on XGATE. No need for marking atomic sections since this section
  * has the highest priority. */
 void pulseAccumulatorOverflowISR() {
@@ -128,22 +147,22 @@ void pulseAccumulatorOverflowISR() {
   /* Enable INT on TC0 */
   TIE |= (uint8_t)(1 << 0);
 
-  accumulatorAdder_s += (HIGH_RES_TEETH_PER_EMULATED_CRANK_TOOTH);
+  accumulatorAdder_s += (HIGH_RES_TEETH_PER_EMULATED_CRANK_TOOTH) + PACN3;
   // Roll back PA counter so we get another ISR after 10 input edges
-  PACN3 = ((uint8_t)0 - (HIGH_RES_TEETH_PER_EMULATED_CRANK_TOOTH));
+  PACN3 = (PACN3 - (HIGH_RES_TEETH_PER_EMULATED_CRANK_TOOTH));
 
-if (PORTA & BIT0) {
-  PORTA &= 0xFE;
-} else {
-  PORTA |= 1;
-}
+//if (PORTA & BIT0) {
+//  PORTA &= 0xFE;
+//} else {
+//  PORTA |= 1;
+//}
 
   PAFLG |= PA0VF;  // Clear interrupt
 }
 
 /* Called on every pulse-accumulator overflow */
 void PrimaryEngineAngle() {
-  //Disable capture on TC0
+  //Disable capture falling on TC0 TODO revisit it may make more sense to capture on the opposite of the PACN
   TIOS |= (1 << 0);
 
   /* Disable INT on TC0 */
@@ -152,17 +171,16 @@ void PrimaryEngineAngle() {
   /* Clear INT flag */
   TFLG1 = C0F;
 
-  ++decoderStats_g.secondaryTeethSeen;
 
-  if (PORTA & BIT0) {
-    PORTA &= 0xFB;
-  } else {
-    PORTA |= BIT2;
-  }
+//  if (PORTA & BIT0) {
+//    PORTA &= 0xFB;
+//  } else {
+//    PORTA |= BIT2;
+//  }
 
   /* Get current timestamp taking into account the overflow counter */
   ExtendedTime timeStamp;
-
+  /* TODO roll this trick into an inline function */
   timeStamp.timeWord[1] = TC0;
   if (TFLG2 && !(TC0 & 0x8000)) {
     timeStamp.timeWord[0] = timerExtensionCounter_g + 1;
@@ -205,26 +223,25 @@ void PrimaryEngineAngle() {
       } else {
         allowedTollerance = Config.tachDecoderSettings.inputEventTollerance;
       }
-//TODO fix bug  it will lose sync randomly commenting out the filter code allows it to run OK
       if (decoderStats_g.RPM > Config.tachDecoderSettings.filterBypassRPM) {
         if (ratioBetweenCurrentAndLast < allowedTollerance) {
-PORTA |= BIT1;
+//PORTA |= BIT1;
           if (decoderStats_g.instantTicksPerDegree < previousPrimaryTicksPerDegree) {
-            resetDecoderStatus(PACN3);
+            resetDecoderStatus(PRIMARY_EVENT_TOO_SOON);
           } else {
             resetDecoderStatus(PRIMARY_EVENT_TOO_LATE);
           }
           return;
         }
       }
-decoderStats_g.capturedAngle = PACN3;
-PORTA &= 0xFD;
-    }
-
-    if (decoderStats_g.requiredSyncCycles == 0) {
-      plotOutputs(&decoderStats_g, timeStamp.time, TOTAL_ENGINE_CYCLE_INDEXES);
-      decoderStats_g.syncADCsamples += updateAngleDependantData(&decoderStats_g, Config.mechanicalProperties.cylinderCount,
-          &(Config.CylinderSetup[0]));
+//decoderStats_g.capturedAngle = PACN3;
+//PORTA &= 0xFD;
+      if (decoderStats_g.requiredSyncCycles == 0) {
+        plotOutputs(&decoderStats_g, timeStamp.time, TOTAL_ENGINE_CYCLE_INDEXES);
+        //decoderStats_g.debug_16b = getAngle(decoderStats_g.currentPrimaryEvent) / 5;
+        decoderStats_g.syncADCsamples += updateAngleDependantData(&decoderStats_g, Config.mechanicalProperties.cylinderCount,
+            &(Config.CylinderSetup[0]));
+      }
     }
   }
 
@@ -246,57 +263,65 @@ PORTA &= 0xFD;
 
 
 void SecondaryEngineAngle() {
-	/* Clear the interrupt flag */
-  TFLG1 = C1F;
 
-  ATOMIC_START();
-  uint8_t currentWindowEdges = diffUint8(PACN3, lastAccumulatorCount_s);
-  lastAccumulatorCount_s = PACN3;
+  ++decoderStats_g.primaryTeethSeen;
 
-  currentWindowEdges += accumulatorAdder_s;
-  accumulatorAdder_s = 0;
-  ATOMIC_END();
+  if (decoderStats_g.decoderFlags.bits.phaseLock) { /* Verify sync */
 
-  decoderStats_g.primaryTeethSeen = currentWindowEdges;
+    ATOMIC_START();
+    uint8_t currentWindowEdges = PACN3 - ((uint8_t)255 - SYNC_OFFSET);
 
-  uint8_t i;
+    currentWindowEdges += accumulatorAdder_s;
+    accumulatorAdder_s = 0;
+    ATOMIC_END();
 
-  if (decoderStats_g.decoderFlags.bits.phaseLock) {
     /* Verify Sync */
     ++internalSyncIndex_s;
-
     if (internalSyncIndex_s > (ARRAY_SIZE(inputWindows) - 1)) {
       internalSyncIndex_s = 0;
     }
-    uint8_t countDifference = diffUint8(currentWindowEdges, inputWindows[internalSyncIndex_s].windowCount);
+    uint8_t countDifference;
+
+    if (currentWindowEdges > inputWindows[internalSyncIndex_s].windowCountSynced) {
+      countDifference = currentWindowEdges - inputWindows[internalSyncIndex_s].windowCountSynced;
+    } else {
+      countDifference = inputWindows[internalSyncIndex_s].windowCountSynced - currentWindowEdges;
+    }
 
     if (countDifference > EDGE_TOLLERANCE) {
-      if (currentWindowEdges > inputWindows[internalSyncIndex_s].windowCount){
+      if (currentWindowEdges > inputWindows[internalSyncIndex_s].windowCountSynced){
         resetDecoderStatus(0xFE); // DEFINE errorno
       } else {
         resetDecoderStatus(0xFF); // DEFINE errorno
       }
     }
-  } else {
-    /* Find Sync */
+  } else {  /* Find Sync */
+
+    ATOMIC_START();
+    uint8_t currentWindowEdges = diffUint8(PACN3, lastAccumulatorCount_s);
+    lastAccumulatorCount_s = PACN3;
+    currentWindowEdges += accumulatorAdder_s;
+    accumulatorAdder_s = 0;
+    ATOMIC_END();
+
+    decoderStats_g.secondaryTeethSeen = currentWindowEdges;
+
+    uint8_t i;
+
     for (i = 0; ARRAY_SIZE(inputWindows) > i; ++i) {
       uint8_t countDifference = diffUint8(currentWindowEdges, inputWindows[i].windowCount);
       if (countDifference < EDGE_TOLLERANCE) {
         if (internalFlags_s.lastWindowMatch) {
           decoderStats_g.decoderFlags.bits.phaseLock = 1;
-          internalFlags_s.lastWindowMatch = 0;
           internalSyncIndex_s = i;
-          decoderStats_g.currentPrimaryEvent = inputWindows[i].primaryEventIndex;
-          //We need to set the PA counter to the correct value so our emulated pattern is synced!!!
+          decoderStats_g.currentPrimaryEvent = inputWindows[internalSyncIndex_s].primaryEventIndex;
+          /*  We need to set the PA counter to the correct value so our emulated pattern is synced!!! */
           ATOMIC_START();
           if ((PACN3 - SYNC_OFFSET) == 0) {
-
+            /* TODO  We should be able to collapse these two cases using PANC3's value */
           } else {
-            //uint8_t difference = PACN3;
             //TODO use pin state to see if we need to add one to our accumulatorAdder
             PACN3 = ((uint8_t)0 - (HIGH_RES_TEETH_PER_EMULATED_CRANK_TOOTH - SYNC_OFFSET));
-            lastAccumulatorCount_s = ((uint8_t)0 - (HIGH_RES_TEETH_PER_EMULATED_CRANK_TOOTH - SYNC_OFFSET));
-            //accumulatorAdder_s += difference + (HIGH_RES_TEETH_PER_EMULATED_CRANK_TOOTH - SYNC_OFFSET);
           }
           ATOMIC_END();
 
@@ -304,9 +329,13 @@ void SecondaryEngineAngle() {
           internalFlags_s.lastWindowMatch = 1;
         }
         break;
+      } else {
+          internalFlags_s.lastWindowMatch = 0;
       }
     }
   }
 
+  /* Clear the interrupt flag */
+  TFLG1 = C1F;
 }
 

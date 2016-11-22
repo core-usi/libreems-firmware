@@ -56,13 +56,13 @@
 #define CH0_MASK   (1 << 0)
 
 #define CH1_PORT   PORTD_ADDR
-#define CH1_MASK   (1 << 0)
+#define CH1_MASK   (1 << 1)
 
 #define CH2_PORT   PORTD_ADDR
-#define CH2_MASK   (1 << 0)
+#define CH2_MASK   (1 << 2)
 
 #define CH3_PORT   PORTD_ADDR
-#define CH3_MASK   (1 << 0)
+#define CH3_MASK   (1 << 3)
 
 /* We setup the next for channels for fuel */
 #define CH4_PORT   PORTB_ADDR
@@ -93,16 +93,16 @@
 
 /* Typically last four pins on port D are used for ignition, for guys with > 4 cylinders */
 #define CH12_PORT  PORTD_ADDR
-#define CH12_MASK  (1 << 0)
+#define CH12_MASK  (1 << 4)
 
 #define CH13_PORT  PORTD_ADDR
-#define CH13_MASK  (1 << 0)
+#define CH13_MASK  (1 << 5)
 
 #define CH14_PORT  PORTD_ADDR
-#define CH14_MASK  (1 << 0)
+#define CH14_MASK  (1 << 6)
 
 #define CH15_PORT  PORTD_ADDR
-#define CH15_MASK  (1 << 0)
+#define CH15_MASK  (1 << 7)
 
 /* More channels, incase you need them */
 #define CH16_PORT  PORTC_ADDR
