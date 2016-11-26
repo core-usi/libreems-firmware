@@ -2,8 +2,7 @@
 
 ### Introduction
 
-LibreEMS - The open source engine management system! This is a fork from the 
-FreeEMS project (freeems.org)
+LibreEMS - The open source engine management system!
 
 Please see [LibreEMS.org](http://LibreEMS.org) for the most up to date information and links!
 
