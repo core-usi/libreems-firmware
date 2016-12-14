@@ -78,7 +78,7 @@ void* SmallTablesDFlash2Location;
 /* Flash ONLY blocks */
 void* IATTransferTableLocation;
 void* CHTTransferTableLocation;
-void* MAFTransferTableLocation;
+void* MATTransferTableLocation;
 void* TestTransferTableLocation;
 
 
@@ -157,6 +157,8 @@ uint16_t lookupBlockDetails(uint16_t locationID, blockDetails* details){
   extern Flaggable2 Flaggables2;
   extern const volatile uint16_t IATTransferTable[1024]; /* 2k */                                                                            
   extern const volatile uint16_t CHTTransferTable[1024];
+  extern const volatile uint16_t MATTransferTable[1024];
+
 
   /* Initialise the four values needed for operations on memory at 0 for error checking */
   details->RAMPage      = 0;
@@ -190,12 +192,13 @@ uint16_t lookupBlockDetails(uint16_t locationID, blockDetails* details){
     details->FlashAddress = CHTTransferTableLocation;
     details->descriptorID = CHT_TRANSFER_TID;
     break;
-#ifdef ALL_CONFIG
-  case MAF_TRANSFER_TABLE_LOCATION_ID:
-    details->size = sizeof(MAFTransferTable);
+  case MAT_TRANSFER_TABLE_LOCATION_ID:
+    details->size = sizeof(MATTransferTable);
     details->FlashPage = LOOKUP_PPAGE;
-    details->FlashAddress = MAFTransferTableLocation;
+    details->FlashAddress = MATTransferTableLocation;
+    details->descriptorID = MAT_TRANSFER_TID;
     break;
+#ifdef ALL_CONFIG
   case TEST_TRANSFER_TABLE_LOCATION_ID:
     details->size = sizeof(TestTransferTable);
     details->FlashPage = LOOKUP_PPAGE;

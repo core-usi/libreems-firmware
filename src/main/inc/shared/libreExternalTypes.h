@@ -59,6 +59,7 @@ typedef enum {
   EGO_VS_LAMBDA_TID                 = 21,
   EGT_VS_VOLTAGE_TID                = 22,
   TEMP_VS_ASE_PERCENT_TID           = 23,
+  MAT_TRANSFER_TID                  = 24,
 
   UNDEF_TABLE_FORMAT   = 255
 }TableDescriptorID;

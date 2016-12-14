@@ -131,7 +131,7 @@
 /* Flash ONLY lookup tables blocks */
 #define IAT_TRANSFER_TABLE_LOCATION_ID                      0x8000 /* 2k */
 #define CHT_TRANSFER_TABLE_LOCATION_ID                      0x8001 /* 2k */
-#define MAF_TRANSFER_TABLE_LOCATION_ID                      0x8002 /* 2k */
+#define MAT_TRANSFER_TABLE_LOCATION_ID                      0x8002 /* 2k */
 #define TEST_TRANSFER_TABLE_LOCATION_ID                     0x8003 /* 2k */
 
 #ifdef BLOCK_DETAILS_LOOKUP_C // only for here, external stuff should use the flags field for determining what to do/not do.

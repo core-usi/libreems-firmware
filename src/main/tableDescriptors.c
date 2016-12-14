@@ -101,6 +101,15 @@ const TableDescriptor tableDescriptor[] TD_BASE_PAGE = {
     .lookupID  = CHT_DID
   },
   {
+    .tableKey  = MAT_TRANSFER_TID,
+    .tableName = TD_MAT_TRANSFER,
+    .tableDesc = TD_MANIFOLD_AIR_TEMPERATURE_SENSOR_TABLE,
+    .formatID  = TABLE_1D,
+    .xAxisID   = NULL_DID,
+    .yAxisID   = NULL_DID,
+    .lookupID  = MAT_DID
+  },
+  {
     .tableKey  = LAMBDA_VS_LOAD_TID,
     .tableName = TD_LAMBDA,
     .tableDesc = TD_LAMBDA_VS_LOAD,

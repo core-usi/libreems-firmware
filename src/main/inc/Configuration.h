@@ -283,7 +283,7 @@ typedef struct{
 
 typedef struct MechanicalProperties {
   uint16_t perCylinderVolume;   ///< Displacement of each cylinder ie 5.7L / 8 = 712.5 CCs */
-  uint16_t decoderInputAngleOffset;
+  int16_t  decoderInputAngleOffset;
   uint8_t  cylinderCount;       ///< The number of cylinders your engine has */
   uint8_t  revoloutionsPerCycle;  ///< The number of 360 degree revolutions needed to complete an engine cycle */
 }MechanicalProperties;

@@ -129,15 +129,15 @@ void initADC(){
 void initLookupAddresses(){
   extern const volatile uint16_t IATTransferTable[]; /* 2k */                                                                            
   extern const volatile uint16_t CHTTransferTable[]; /* 2k */
-  extern const volatile uint16_t MAFTransferTable[]; /* 2k */
+  extern const volatile uint16_t MATTransferTable[]; /* 2k */
   extern const volatile uint8_t TestTransferTable[];
   extern void* IATTransferTableLocation;
   extern void* CHTTransferTableLocation;
-  extern void* MAFTransferTableLocation;
+  extern void* MATTransferTableLocation;
   extern void* TestTransferTableLocation;
   IATTransferTableLocation = (void*)&IATTransferTable;
   CHTTransferTableLocation = (void*)&CHTTransferTable;
-  MAFTransferTableLocation = (void*)&MAFTransferTable;
+  MATTransferTableLocation = (void*)&MATTransferTable;
   TestTransferTableLocation = (void*)&TestTransferTable;
 }
 

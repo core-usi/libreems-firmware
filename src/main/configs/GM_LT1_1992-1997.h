@@ -120,7 +120,7 @@
 #define DERATE_L1_MAP_MAX_IGNITION_DISABLE    125
 #define DERATE_L1_MAP_IGNITION_REENABLE       120
 
-#define INPUT_OFFSET			          ENGINE_ANGLE_S(0.0)
+#define INPUT_OFFSET			          ENGINE_ANGLE_S(-8.0)
 #define ENGINE_CYL_VOLUME		        CC_VOLUME_S(727.17)
 #define SPECIFIED_OPERATING_LEVELS  3
 
@@ -227,7 +227,7 @@
  */
 
 /* We reserve the first four channels for ignition */
-#define CH0_PORT   PORTD_ADDR
+#define CH0_PORT   PORTB_ADDR
 #define CH0_MASK   (1 << 0)
 
 #define CH1_PORT   PORTD_ADDR
@@ -240,7 +240,7 @@
 #define CH3_MASK   (1 << 0)
 
 /* We setup the next for channels for fuel */
-#define CH4_PORT   PORTB_ADDR
+#define CH4_PORT   PORTD_ADDR
 #define CH4_MASK   (1 << 0)
 
 #define CH5_PORT   PORTB_ADDR
@@ -662,6 +662,9 @@
 
 /* IAT Transfer Table */
 #define IAT_TRANSFER_TABLE           "../data/thermistors/GM-2k0Bias.h"
+
+/* MAT Transfer Table */
+#define MAT_TRANSFER_TABLE           "../data/thermistors/GM-2k0Bias.h"
 
 /* FUEL (VE) Table(s) */
 #define VE_TABLE_RPM_LENGTH          16
