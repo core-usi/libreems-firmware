@@ -117,10 +117,13 @@ void* AAPlutTableLocation;
 void* MAPlutTableLocation;
 void* EGOlutTableLocation;
 void* EGTlutTableLocation;
+void* OILPlutTableLocation;
 void* rpmVersusEngineTempTableLocation;
 void* rpmVersusIACStepsTableLocation;
 void* fuelDeltaVersusPercentAdderTableLocation;
 void* fuelPressurelutTableLocation;
+void* oilPressurelutTableLocation;
+
 
 /* Small chunks of TablesD here */
 
@@ -581,6 +584,15 @@ uint16_t lookupBlockDetails(uint16_t locationID, blockDetails* details){
     details->FlashAddress = fuelPressurelutTableLocation;
     details->parent = SMALL_TABLES_C_LOCATION_ID;
     details->descriptorID = AAP_VS_VOLTAGE_TID;
+    break;
+  case OIL_PRESSURE_LUT_LOCATION_ID:
+    details->size = sizeof(TablesC.SmallTablesC.oilPressureLUT);
+    details->RAMPage = RPAGE_TUNE_ONE;
+    details->FlashPage = TUNETABLES_PPAGE;
+    details->RAMAddress = (void*) &TablesC.SmallTablesC.oilPressureLUT;
+    details->FlashAddress = oilPressurelutTableLocation;
+    details->parent = SMALL_TABLES_C_LOCATION_ID;
+    details->descriptorID = OILP_VS_VOLTAGE_TID;
     break;
   case MAP_LUT_LOCATION_ID:
     details->size = sizeof(TablesC.SmallTablesC.MAPlut);

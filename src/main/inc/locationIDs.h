@@ -89,6 +89,8 @@
 #define FUEL_DELTA_VS_PERCENT_ADDER_TABLE_LOCATION_ID       0x0129
 #define FUEL_PRESSURE_LUT_LOCATION_ID                       0x012A
 #define EGT_LUT_LOCATION_ID                                 0x012B
+#define OIL_PRESSURE_LUT_LOCATION_ID                        0x012C
+
 
 
 #ifdef BLOCK_DETAILS_LOOKUP_C // only for here, external stuff should use the flags field for determining what to do/not do.

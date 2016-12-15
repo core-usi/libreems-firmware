@@ -608,6 +608,10 @@
   {AV(4.285), LR(1.357)}, \
   {AV(5.000), LR(1.50)}
 
+/* Oil Pressure table 0-100 ebay sensor */
+#define LOOKUP_OIL_PRESSURE  EBAY_0_100_PSI
+
+
 #define LOOKUP_EGT EGT_F16
 
 /* CHT Transfer Table */

@@ -209,6 +209,15 @@ const TableDescriptor tableDescriptor[] TD_BASE_PAGE = {
     .lookupID   = MAP_DID
   },
   {
+    .tableKey   = OILP_VS_VOLTAGE_TID,
+    .tableName  = TD_OILP_SENSOR_LUT,
+    .tableDesc  = TD_OILP_VS_VOLTAGE_SENSOR_LOOKUP,
+    .formatID   = TABLE_2D_STRUCTURED,
+    .xAxisID    = AV_DID,
+    .yAxisID    = NULL_DID,
+    .lookupID   = OILP_DID
+  },
+  {
     .tableKey   = RPM_LIMIT_VS_TEMPERATURE_TID,
     .tableName  = TD_RPM_LIMIT,
     .tableDesc  = TD_ENGINE_TEMPERATURE_VS_RPM_LIMIT,

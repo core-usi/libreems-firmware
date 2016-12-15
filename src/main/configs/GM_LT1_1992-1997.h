@@ -666,6 +666,9 @@
 /* MAT Transfer Table */
 #define MAT_TRANSFER_TABLE           "../data/thermistors/GM-2k0Bias.h"
 
+/* Oil Pressure table 0-100 ebay sensor */
+#define LOOKUP_OIL_PRESSURE  EBAY_0_100_PSI
+
 /* FUEL (VE) Table(s) */
 #define VE_TABLE_RPM_LENGTH          16
 #define VE_TABLE_LOAD_LENGTH         16

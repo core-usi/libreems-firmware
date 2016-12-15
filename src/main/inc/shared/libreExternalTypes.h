@@ -60,6 +60,7 @@ typedef enum {
   EGT_VS_VOLTAGE_TID                = 22,
   TEMP_VS_ASE_PERCENT_TID           = 23,
   MAT_TRANSFER_TID                  = 24,
+  OILP_VS_VOLTAGE_TID               = 25,
 
   UNDEF_TABLE_FORMAT   = 255
 }TableDescriptorID;
@@ -126,6 +127,7 @@ typedef enum {
   ANG_OFFSET_DID = 61,
   AV_DID         = 62,
   GS_DID         = 63,
+  OILP_DID       = 64,
 
   NOT_USED_DID   = 254,
   UNDEF_DID      = 255,

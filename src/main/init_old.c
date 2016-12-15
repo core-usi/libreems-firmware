@@ -318,6 +318,7 @@ void initTunableAddresses(){
   extern void* EGTlutTableLocation;
   extern void* AAPlutTableLocation;
   extern void* MAPlutTableLocation;
+  extern void* oilPressurelutTableLocation;
   extern void* fuelPressurelutTableLocation;
   extern void* rpmVersusIACStepsTableLocation;
   extern void* rpmVersusEngineTempTableLocation;
@@ -374,6 +375,7 @@ void initTunableAddresses(){
   AAPlutTableLocation        = (void*) &SmallTablesCFlash.AAPlut;
   MAPlutTableLocation        = (void*) &SmallTablesCFlash.MAPlut;
   fuelPressurelutTableLocation = (void*) &SmallTablesCFlash.fuelPressureLUT;
+  oilPressurelutTableLocation  = (void*) &SmallTablesCFlash.oilPressureLUT;
   rpmVersusIACStepsTableLocation = (void*) &SmallTablesCFlash.rpmVersusIACStepsTable;
   rpmVersusEngineTempTableLocation = (void*) &SmallTablesCFlash.rpmVersusEngineTempTable;
   fuelDeltaVersusPercentAdderTableLocation = (void*) &SmallTablesCFlash.fuelDeltaVersusPercentAdderTable;
