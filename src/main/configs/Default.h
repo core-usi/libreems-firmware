@@ -573,6 +573,12 @@
 /* IAT Transfer Table */
 #define IAT_TRANSFER_TABLE           "../data/thermistors/Denso-2k7Bias.h"
 
+/* IAT Transfer Table */
+#define MAT_TRANSFER_TABLE           "../data/thermistors/Denso-2k4Bias.h"
+
+#define OIL_PRESSURE_LOOKUP_TABLE    EBAY_0_100_PSI
+
+
 /* FUEL (VE) Table(s) */
 #define VE_TABLE_RPM_LENGTH          MAINTABLE_RPM_LENGTH
 #define VE_TABLE_LOAD_LENGTH         MAINTABLE_LOAD_LENGTH

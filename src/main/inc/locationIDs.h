@@ -89,6 +89,8 @@
 #define FUEL_DELTA_VS_PERCENT_ADDER_TABLE_LOCATION_ID       0x0129
 #define FUEL_PRESSURE_LUT_LOCATION_ID                       0x012A
 #define EGT_LUT_LOCATION_ID                                 0x012B
+#define OIL_PRESSURE_LUT_LOCATION_ID                        0x012C
+
 
 
 #ifdef BLOCK_DETAILS_LOOKUP_C // only for here, external stuff should use the flags field for determining what to do/not do.
@@ -131,7 +133,7 @@
 /* Flash ONLY lookup tables blocks */
 #define IAT_TRANSFER_TABLE_LOCATION_ID                      0x8000 /* 2k */
 #define CHT_TRANSFER_TABLE_LOCATION_ID                      0x8001 /* 2k */
-#define MAF_TRANSFER_TABLE_LOCATION_ID                      0x8002 /* 2k */
+#define MAT_TRANSFER_TABLE_LOCATION_ID                      0x8002 /* 2k */
 #define TEST_TRANSFER_TABLE_LOCATION_ID                     0x8003 /* 2k */
 
 #ifdef BLOCK_DETAILS_LOOKUP_C // only for here, external stuff should use the flags field for determining what to do/not do.

@@ -608,13 +608,21 @@
   {AV(4.285), LR(1.357)}, \
   {AV(5.000), LR(1.50)}
 
+/* Oil Pressure table 0-100 ebay sensor */
+#define LOOKUP_OIL_PRESSURE  EBAY_0_100_PSI
+
+
 #define LOOKUP_EGT EGT_F16
 
 /* CHT Transfer Table */
-#define CHT_TRANSFER_TABLE           "../data/thermistors/Denso-2k4Bias.h"
+#define CHT_TRANSFER_TABLE           "../data/thermistors/Denso-2k0Bias.h"
 
 /* IAT Transfer Table */
-#define IAT_TRANSFER_TABLE           "../data/thermistors/Denso-2k4Bias.h"
+#define IAT_TRANSFER_TABLE           "../data/thermistors/Denso-2k0Bias.h"
+
+/* MAT Transfer Table */
+#define MAT_TRANSFER_TABLE           "../data/thermistors/GM-2k0Bias.h"
+
 
 /* FUEL (VE) Table(s) */
 #define VE_TABLE_RPM_LENGTH          25

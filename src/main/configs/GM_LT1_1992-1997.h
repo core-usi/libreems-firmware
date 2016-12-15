@@ -83,14 +83,14 @@
 #define VSS_DIVISOR                 30
 
 /* WARNING capture edges may be over written by decoder */
-#define ECT0_CAPTURE_RISING         FALSE
-#define ECT0_CAPTURE_FALLING        TRUE
-#define ECT1_CAPTURE_RISING         FALSE
-#define ECT1_CAPTURE_FALLING        TRUE
+#define ECT0_CAPTURE_RISING         TRUE
+#define ECT0_CAPTURE_FALLING        FALSE
+#define ECT1_CAPTURE_RISING         TRUE
+#define ECT1_CAPTURE_FALLING        FALSE
 #define ECT2_CAPTURE_RISING         TRUE
 #define ECT2_CAPTURE_FALLING        TRUE
-#define ECT3_CAPTURE_RISING         TRUE
-#define ECT3_CAPTURE_FALLING        FALSE
+#define ECT3_CAPTURE_RISING         FALSE
+#define ECT3_CAPTURE_FALLING        TRUE
 #define ECT4_CAPTURE_RISING         TRUE  /* No effect reserved by XGate */
 #define ECT4_CAPTURE_FALLING        TRUE  /* No effect reserved by XGate */
 #define ECT5_CAPTURE_RISING         TRUE
@@ -120,7 +120,7 @@
 #define DERATE_L1_MAP_MAX_IGNITION_DISABLE    125
 #define DERATE_L1_MAP_IGNITION_REENABLE       120
 
-#define INPUT_OFFSET			          ENGINE_ANGLE_S(30.5)
+#define INPUT_OFFSET			          ENGINE_ANGLE_S(-8.0)
 #define ENGINE_CYL_VOLUME		        CC_VOLUME_S(727.17)
 #define SPECIFIED_OPERATING_LEVELS  3
 
@@ -227,20 +227,20 @@
  */
 
 /* We reserve the first four channels for ignition */
-#define CH0_PORT   PORTD_ADDR
+#define CH0_PORT   PORTB_ADDR
 #define CH0_MASK   (1 << 0)
 
 #define CH1_PORT   PORTD_ADDR
-#define CH1_MASK   (1 << 1)
+#define CH1_MASK   (1 << 0)
 
 #define CH2_PORT   PORTD_ADDR
-#define CH2_MASK   (1 << 2)
+#define CH2_MASK   (1 << 0)
 
 #define CH3_PORT   PORTD_ADDR
-#define CH3_MASK   (1 << 3)
+#define CH3_MASK   (1 << 0)
 
 /* We setup the next for channels for fuel */
-#define CH4_PORT   PORTB_ADDR
+#define CH4_PORT   PORTD_ADDR
 #define CH4_MASK   (1 << 0)
 
 #define CH5_PORT   PORTB_ADDR
@@ -268,16 +268,16 @@
 
 /* Typically last four pins on port D are used for ignition, for guys with > 4 cylinders */
 #define CH12_PORT  PORTD_ADDR
-#define CH12_MASK  (1 << 4)
+#define CH12_MASK  (1 << 0)
 
 #define CH13_PORT  PORTD_ADDR
-#define CH13_MASK  (1 << 5)
+#define CH13_MASK  (1 << 0)
 
 #define CH14_PORT  PORTD_ADDR
-#define CH14_MASK  (1 << 6)
+#define CH14_MASK  (1 << 0)
 
 #define CH15_PORT  PORTD_ADDR
-#define CH15_MASK  (1 << 7)
+#define CH15_MASK  (1 << 0)
 
 /* More channels, incase you need them */
 #define CH16_PORT  PORTC_ADDR
@@ -472,16 +472,16 @@
   {EP(100), DEG(6.00)}
 
 #define RPM_VS_DWELL_TABLE \
-  {RPM(  500), MS(4.00)}, \
-  {RPM( 1000), MS(4.00)}, \
-  {RPM( 1500), MS(4.00)}, \
-  {RPM( 2000), MS(3.50)}, \
-  {RPM( 2500), MS(3.50)}, \
-  {RPM( 3000), MS(3.50)}, \
-  {RPM( 3500), MS(3.00)}, \
-  {RPM( 4000), MS(3.00)}, \
-  {RPM( 6500), MS(2.50)}, \
-  {RPM( 8500), MS(2.25)}, \
+  {RPM(  500), MS(2.00)}, \
+  {RPM( 1000), MS(2.00)}, \
+  {RPM( 1500), MS(2.00)}, \
+  {RPM( 2000), MS(2.00)}, \
+  {RPM( 2500), MS(2.00)}, \
+  {RPM( 3000), MS(2.00)}, \
+  {RPM( 3500), MS(2.00)}, \
+  {RPM( 4000), MS(2.00)}, \
+  {RPM( 6500), MS(2.00)}, \
+  {RPM( 8500), MS(2.00)}, \
   {RPM(10000), MS(2.00)}, \
   {RPM(10500), MS(2.00)}, \
   {RPM(11000), MS(2.00)}, \
@@ -663,12 +663,18 @@
 /* IAT Transfer Table */
 #define IAT_TRANSFER_TABLE           "../data/thermistors/GM-2k0Bias.h"
 
+/* MAT Transfer Table */
+#define MAT_TRANSFER_TABLE           "../data/thermistors/GM-2k0Bias.h"
+
+/* Oil Pressure table 0-100 ebay sensor */
+#define LOOKUP_OIL_PRESSURE  EBAY_0_100_PSI
+
 /* FUEL (VE) Table(s) */
-#define VE_TABLE_RPM_LENGTH          25
+#define VE_TABLE_RPM_LENGTH          16
 #define VE_TABLE_LOAD_LENGTH         16
-#define VE_RPM_AXIS_PRIMARY          "../data/tables/axis/SeansR1-RPM-25.h"
-#define VE_LOAD_AXIS_PRIMARY         "../data/tables/axis/SeansR1-Load-16.h"
-#define VE_TABLE_PRIMARY             "../data/tables/ve/SeansR1-VE25RPMx16Load.h"
+#define VE_RPM_AXIS_PRIMARY          "../data/tables/axis/SeansLT1-RPM-16.h"
+#define VE_LOAD_AXIS_PRIMARY         "../data/tables/axis/SeansLT1-Load-16.h"
+#define VE_TABLE_PRIMARY             "../data/tables/ve/SeansLT1-VE16RPMx16Load.h"
 #define VE_RPM_AXIS_SECONDARY        "../data/tables/axis/DefaultWith400Spacing-RPM-27.h"
 #define VE_LOAD_AXIS_SECONDARY       "../data/tables/axis/DefaultWith10and20SplitSpacing-Load-21.h"
 #define VE_TABLE_SECONDARY           "../data/tables/ve/Default-VE24RPMx19Load.h"
@@ -680,17 +686,17 @@
   
 /* Lambda Table */
 #define LAMBDA_TABLE_RPM_LENGTH      16
-#define LAMBDA_TABLE_LOAD_LENGTH     15
+#define LAMBDA_TABLE_LOAD_LENGTH     16
 #define LAMBDA_RPM_AXIS              "../data/tables/axis/SeansR1-RPM-16.h"
 #define LAMBDA_LOAD_AXIS             "../data/tables/axis/SeansR1-Load-16.h"
 #define LAMBDA_TABLE                 "../data/tables/lambda/Generic-Lambda16RPMx16Load.h"
 
 /* Ignition Table */
-#define IGNITION_TABLE_RPM_LENGTH    25
+#define IGNITION_TABLE_RPM_LENGTH    16
 #define IGNITION_TABLE_LOAD_LENGTH   16
-#define IGNITION_RPM_AXIS_PRIMARY    "../data/tables/axis/SeansR1-RPM-25.h"
-#define IGNITION_LOAD_AXIS_PRIMARY   "../data/tables/axis/SeansR1-Load-16.h"
-#define IGNITION_TABLE_PRIMARY       "../data/tables/ign/SeansR1-Timing25RPMx16Load.h"
+#define IGNITION_RPM_AXIS_PRIMARY    "../data/tables/axis/SeansLT1-RPM-16.h"
+#define IGNITION_LOAD_AXIS_PRIMARY   "../data/tables/axis/SeansLT1-Load-16.h"
+#define IGNITION_TABLE_PRIMARY       "../data/tables/ign/flat10degrees.h"
 #define IGNITION_RPM_AXIS_SECONDARY  "../data/tables/axis/DefaultWith400Spacing-RPM-27.h"
 #define IGNITION_LOAD_AXIS_SECONDARY "../data/tables/axis/DefaultWith10and20SplitSpacing-Load-21.h"
 #define IGNITION_TABLE_SECONDARY     "../data/tables/ign/Default-Timing24RPMx19Load.h"

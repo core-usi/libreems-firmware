@@ -25,7 +25,7 @@
  *
  * @ingroup dataInitialisers
  *
- * @brief Coolant Temperature Transfer Table
+ * @brief Manifold Air Temperature Transfer Table
  *
  */
 
@@ -34,6 +34,6 @@
 #include "../inc/Configuration.h"
 
 
-const volatile uint16_t CHTTransferTable[1024] LOOKUPD = {
-#include CHT_TRANSFER_TABLE
+const volatile uint16_t MATTransferTable[1024] LOOKUPD = {
+#include MAT_TRANSFER_TABLE
 };

@@ -101,6 +101,15 @@ const TableDescriptor tableDescriptor[] TD_BASE_PAGE = {
     .lookupID  = CHT_DID
   },
   {
+    .tableKey  = MAT_TRANSFER_TID,
+    .tableName = TD_MAT_TRANSFER,
+    .tableDesc = TD_MANIFOLD_AIR_TEMPERATURE_SENSOR_TABLE,
+    .formatID  = TABLE_1D,
+    .xAxisID   = NULL_DID,
+    .yAxisID   = NULL_DID,
+    .lookupID  = MAT_DID
+  },
+  {
     .tableKey  = LAMBDA_VS_LOAD_TID,
     .tableName = TD_LAMBDA,
     .tableDesc = TD_LAMBDA_VS_LOAD,
@@ -198,6 +207,15 @@ const TableDescriptor tableDescriptor[] TD_BASE_PAGE = {
     .xAxisID    = AV_DID,
     .yAxisID    = NULL_DID,
     .lookupID   = MAP_DID
+  },
+  {
+    .tableKey   = OILP_VS_VOLTAGE_TID,
+    .tableName  = TD_OILP_SENSOR_LUT,
+    .tableDesc  = TD_OILP_VS_VOLTAGE_SENSOR_LOOKUP,
+    .formatID   = TABLE_2D_STRUCTURED,
+    .xAxisID    = AV_DID,
+    .yAxisID    = NULL_DID,
+    .lookupID   = OILP_DID
   },
   {
     .tableKey   = RPM_LIMIT_VS_TEMPERATURE_TID,

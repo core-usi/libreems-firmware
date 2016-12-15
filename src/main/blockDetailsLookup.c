@@ -78,7 +78,7 @@ void* SmallTablesDFlash2Location;
 /* Flash ONLY blocks */
 void* IATTransferTableLocation;
 void* CHTTransferTableLocation;
-void* MAFTransferTableLocation;
+void* MATTransferTableLocation;
 void* TestTransferTableLocation;
 
 
@@ -117,10 +117,13 @@ void* AAPlutTableLocation;
 void* MAPlutTableLocation;
 void* EGOlutTableLocation;
 void* EGTlutTableLocation;
+void* OILPlutTableLocation;
 void* rpmVersusEngineTempTableLocation;
 void* rpmVersusIACStepsTableLocation;
 void* fuelDeltaVersusPercentAdderTableLocation;
 void* fuelPressurelutTableLocation;
+void* oilPressurelutTableLocation;
+
 
 /* Small chunks of TablesD here */
 
@@ -157,6 +160,8 @@ uint16_t lookupBlockDetails(uint16_t locationID, blockDetails* details){
   extern Flaggable2 Flaggables2;
   extern const volatile uint16_t IATTransferTable[1024]; /* 2k */                                                                            
   extern const volatile uint16_t CHTTransferTable[1024];
+  extern const volatile uint16_t MATTransferTable[1024];
+
 
   /* Initialise the four values needed for operations on memory at 0 for error checking */
   details->RAMPage      = 0;
@@ -190,12 +195,13 @@ uint16_t lookupBlockDetails(uint16_t locationID, blockDetails* details){
     details->FlashAddress = CHTTransferTableLocation;
     details->descriptorID = CHT_TRANSFER_TID;
     break;
-#ifdef ALL_CONFIG
-  case MAF_TRANSFER_TABLE_LOCATION_ID:
-    details->size = sizeof(MAFTransferTable);
+  case MAT_TRANSFER_TABLE_LOCATION_ID:
+    details->size = sizeof(MATTransferTable);
     details->FlashPage = LOOKUP_PPAGE;
-    details->FlashAddress = MAFTransferTableLocation;
+    details->FlashAddress = MATTransferTableLocation;
+    details->descriptorID = MAT_TRANSFER_TID;
     break;
+#ifdef ALL_CONFIG
   case TEST_TRANSFER_TABLE_LOCATION_ID:
     details->size = sizeof(TestTransferTable);
     details->FlashPage = LOOKUP_PPAGE;
@@ -578,6 +584,15 @@ uint16_t lookupBlockDetails(uint16_t locationID, blockDetails* details){
     details->FlashAddress = fuelPressurelutTableLocation;
     details->parent = SMALL_TABLES_C_LOCATION_ID;
     details->descriptorID = AAP_VS_VOLTAGE_TID;
+    break;
+  case OIL_PRESSURE_LUT_LOCATION_ID:
+    details->size = sizeof(TablesC.SmallTablesC.oilPressureLUT);
+    details->RAMPage = RPAGE_TUNE_ONE;
+    details->FlashPage = TUNETABLES_PPAGE;
+    details->RAMAddress = (void*) &TablesC.SmallTablesC.oilPressureLUT;
+    details->FlashAddress = oilPressurelutTableLocation;
+    details->parent = SMALL_TABLES_C_LOCATION_ID;
+    details->descriptorID = OILP_VS_VOLTAGE_TID;
     break;
   case MAP_LUT_LOCATION_ID:
     details->size = sizeof(TablesC.SmallTablesC.MAPlut);

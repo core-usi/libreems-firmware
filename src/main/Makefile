@@ -290,7 +290,7 @@ ALLH = $(LINKER) $(MFILE) $(INCDIR)/$(ASMH) $(HEADERS)
 
 # Flash data files
 LOOKUPCLASSES1 = IATTransferTable.c CHTTransferTable.c
-LOOKUPCLASSES2 = MAFTransferTable.c TestTransferTable.c
+LOOKUPCLASSES2 = MATTransferTable.c TestTransferTable.c
 FUELCLASSES = FuelTables.c FuelTables2.c
 TIMECLASSES = TimingTables.c TimingTables2.c
 TUNECLASSES = TunableConfig.c TunableConfig2.c

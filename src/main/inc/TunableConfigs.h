@@ -173,6 +173,7 @@ typedef struct {
       (sizeof(TableEntryUINT16) * RPM_VS_STEPS_TABLE_LENGTH) + \
       (sizeof(TableEntryUINT16) * FUEL_DELTA_VS_PERCENT_ADDER_TABLE_LENGTH) + \
       (sizeof(TableEntryUINT16) * FUEL_PRESSURE_TABLE_LENGTH) + \
+      (sizeof(TableEntryUINT16) * OIL_PRESSURE_TABLE_LENGTH) + \
       (sizeof(TableEntryUINT16) * EGT_LOOKUP_TABLE_LENGTH) \
       )) // Update this if adding another table/struct!
 /** @copydoc SmallTables1 */
@@ -188,6 +189,7 @@ typedef struct {
   TableEntryUINT16 rpmVersusIACStepsTable[RPM_VS_STEPS_TABLE_LENGTH]; ///< Used for Idle Air Control, RPM vs IAC Steps.
   TableEntryUINT16 fuelDeltaVersusPercentAdderTable[FUEL_DELTA_VS_PERCENT_ADDER_TABLE_LENGTH];
   TableEntryUINT16 fuelPressureLUT[FUEL_PRESSURE_TABLE_LENGTH];
+  TableEntryUINT16 oilPressureLUT[OIL_PRESSURE_TABLE_LENGTH];
   TableEntryUINT16 EGTlut[EGT_LOOKUP_TABLE_LENGTH];
   uint8_t filler[SMALL_TABLES_3_FILLER_SIZE]; ///< Padding data.
 } SmallTables3;

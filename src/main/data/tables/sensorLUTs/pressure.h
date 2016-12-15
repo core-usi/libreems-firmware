@@ -63,7 +63,7 @@
   {AV(4.28), KPA_S(270.58)}, \
   {AV(5.00), KPA_S(315.50)}
 
-#define APS_MPXA6115A         \
+#define APS_MPXA6115A        \
   {AV(0.200), KPA_S( 15.0)}, \
   {AV(0.500), KPA_S( 20.0)}, \
   {AV(1.500), KPA_S( 40.0)}, \
@@ -72,5 +72,15 @@
   {AV(3.500), KPA_S( 80.0)}, \
   {AV(4.000), KPA_S( 99.0)}, \
   {AV(4.700), KPA_S(115.0)}
+
+#define EBAY_0_100_PSI          \
+  {AV(0.5),     KPA_S(0.0)},    \
+  {AV(1.071),  KPA_S(98.496)},  \
+  {AV(1.642), KPA_S(196.993)},  \
+  {AV(2.214), KPA_S(295.489)},  \
+  {AV(2.785), KPA_S(393.986)},  \
+  {AV(3.357), KPA_S(492.482)},  \
+  {AV(3.928), KPA_S(590.979)},  \
+  {AV(4.500), KPA_S(689.476)}
 
 #endif /* SRC_MAIN_DATA_TABLES_SENSORLUTS_MAPDENSOR1_H_ */
