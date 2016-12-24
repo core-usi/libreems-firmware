@@ -307,8 +307,6 @@ void updateCylinderCalcs(uint8_t numCylinders) {
 //    }
     /* Apply dwell to spark angle */
     cylinder->igntionEvent->runTime = DerivedVars->Dwell;
-startAngle = offsetAngle(cylinder->TDCAngle, DerivedVars->Advance);
-startAngle = offsetAngle(startAngle, decoderOffset);
 
     dwellInDegrees = ((uint32_t)DerivedVars->Dwell
         * TICKS_PER_DEGREE_MULTIPLIER) / decoderStats->instantTicksPerDegree;
