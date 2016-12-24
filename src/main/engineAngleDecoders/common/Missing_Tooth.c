@@ -188,10 +188,12 @@ void PrimaryEngineAngle() {
 
 			//TODO add additional checks for correct TPD direction
 			if ((ratioBetweenCurrentAndLast < allowedTollerance) &&
-					ticksPerDegree > previousPrimaryTicksPerDegree) {
+					ticksPerDegree > previousPrimaryTicksPerDegree) {  /* Greater than for missing tooth, less than for added tooth */
 				/* see if we have seen a min number of skip teeth */
 				if (consecutiveEvenTeethFound > 3) {
-					ticksPerDegree /= 2; /* mul by num of missing teeth plus 1 */
+				  /* Correct ticks per degree */
+					ticksPerDegree /= (MISSING_CRANK_TEETH + 1);
+					/* normalize the ratio */
 					ratioBetweenCurrentAndLast = mul16(ratioBetweenCurrentAndLast, 2);
 
 					//TODO correct allowedTollerance by adding total between missing teeth
@@ -205,7 +207,9 @@ void PrimaryEngineAngle() {
 						return;
 					} else {
 						decoderStats_g.decoderFlags.bits.crankLock = 1;
-						decoderStats_g.decoderFlags.bits.minimalSync = 1; /* TODO make a config item */
+						if (Config.tachDecoderSettings.minimalSyncRequired == CRANK_ONLY) {
+	            decoderStats_g.decoderFlags.bits.minimalSync = 1;
+						}
 						decoderStats_g.currentPrimaryEvent = 0;
 					}
 				} else {

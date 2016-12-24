@@ -450,7 +450,7 @@ void updateCoreData(MasterConfig *config) {
   CoreVars->BRV = (((uint32_t)ADCBuffers0.BRV * BRV_RANGE) / ADC_DIVISIONS) + BRV_MINIMUM;
   CoreVars->CHT = CHTTransferTable[ADCBuffers0.CHT];
   CoreVars->IAT = IATTransferTable[ADCBuffers0.IAT];
-  CoreVars->MAT = CoreVars->IAT;
+  CoreVars->MAT = IATTransferTable[ADCBuffers0.MAT];
   /* RPM only duplicated here to prevent breakage with EMSTune */
   CoreVars->RPM = getDecoderStats()->RPM;
   CoreVars->EthanolPercentage = readFlexFuelEth();

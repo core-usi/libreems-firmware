@@ -44,6 +44,7 @@ volatile uint16_t   timerExtensionCounter_g;
 static uint16_t      previousPrimaryTicksPerDegree;
 static InternalFlags internalFlags;
 
+
 void decoderSpecificInit() {
   /* Raise interrupt priorities for crank and cam capture.
    * These should always be the same priority so that sync does not ever skip a tooth. */

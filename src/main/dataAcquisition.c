@@ -135,5 +135,3 @@ void updateCapturedInput(uint8_t edge, CapturedInputData *dataStore, ExtendedTim
   previousStamp->time = captureStamp->time;
 
 }
-
-/* ex: set tabstop=2 shiftwidth=2 expandtab softtabstop=2: */

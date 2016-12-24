@@ -73,4 +73,3 @@ void gpCapture3() {
 void gpCapture2() {
   CAPTURE_DATA(2)
 }
-/* ex: set tabstop=2 shiftwidth=2 expandtab softtabstop=2: */
