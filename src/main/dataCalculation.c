@@ -262,6 +262,8 @@ void updateCylinderCalcs(uint8_t numCylinders) {
     ethanolOffset = TableLookupINT16(CoreVars->EthanolPercentage, TablesC.SmallTablesC.ETHvsIgnitionTable, IGN_VS_ETH_TABLE_LENGTH);
   }
 
+  int16_t totalMiscOffsets = decoderOffset + IATOffset + CLTOffset + ethanolOffset;
+
   uint8_t i;
   for (i = 0; i < numCylinders; ++i, ++cylinder) {
     /* Update Fuel */
@@ -293,14 +295,8 @@ void updateCylinderCalcs(uint8_t numCylinders) {
 
     /* Use TDC angle and subtract advance to get abs angle */
     startAngle = offsetAngle(cylinder->TDCAngle, DerivedVars->Advance);
-    /* Apply decoder offset */
-    startAngle = offsetAngle(startAngle, decoderOffset);
-    /* Apply IAT correction */
-    startAngle = offsetAngle(startAngle, IATOffset);
-    /* Apply CHT/CLT correction */
-    startAngle = offsetAngle(startAngle, CLTOffset);
-    /* Apply Ethanol correction */
-    startAngle = offsetAngle(startAngle, ethanolOffset);
+    /* Apply decoder offsets */
+    startAngle = offsetAngle(startAngle, totalMiscOffsets);
     //FIXME temp code to record desired timing for reference
 //    if (i == 0) {
 //      getDecoderStats()->capturedAngle = offsetAngle(startAngle, -(Config.mechanicalProperties.decoderInputAngleOffset));
