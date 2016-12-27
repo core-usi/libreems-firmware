@@ -295,7 +295,7 @@ void updateCylinderCalcs(uint8_t numCylinders) {
 
     /* Use TDC angle and subtract advance to get abs angle */
     startAngle = offsetAngle(cylinder->TDCAngle, DerivedVars->Advance);
-    /* Apply decoder offsets */
+    /* Apply misc offsets */
     startAngle = offsetAngle(startAngle, totalMiscOffsets);
     //FIXME temp code to record desired timing for reference
 //    if (i == 0) {
