@@ -402,14 +402,15 @@ void updateCylinderCuts(uint8_t numCylinders, OperatingLimits *limits) {
 
 void updateTimedDerivatives(DerivedVar *derivedVariables) {
 
-  //TODO make a fixed or flex fuel config flag
-#if CONFIG == SEANKR1_ID
-  derivedVariables->StoichAFR = calculateAFR(CoreVars->EthanolPercentage);
-  derivedVariables->FuelDensity = calculateFuelDensity(CoreVars->EthanolPercentage);
-#else
-  derivedVariables->StoichAFR = Config.fuelingProperties.stoichiometricAFR;
-  derivedVariables->FuelDensity = Config.fuelingProperties.densityOfFuelAtSTP;
-#endif
+  /* See if we are flex-fuel aware */
+  if (Config.fuelingProperties.fuelAlgoFlags.flexFuel) {
+	derivedVariables->StoichAFR = calculateAFR(CoreVars->EthanolPercentage);
+	derivedVariables->FuelDensity = calculateFuelDensity(CoreVars->EthanolPercentage);
+  } else {
+	  derivedVariables->StoichAFR = Config.fuelingProperties.stoichiometricAFR;
+	  derivedVariables->FuelDensity = Config.fuelingProperties.densityOfFuelAtSTP;
+  }
+
   derivedVariables->Displacement = Config.mechanicalProperties.perCylinderVolume;
   FuelAttribs.primaryInjFlow = Config.fuelingProperties.injectorFlow;
   FuelAttribs.secondaryInjFlow = Config.fuelingProperties.secondaryInjectorFlow;
