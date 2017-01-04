@@ -47,7 +47,6 @@ void resetDecoderStatus(uint8_t reasonCode) {
 
   decoderStats_g.decoderFlags.var        = 0;
   decoderStats_g.instantTicksPerDegree   = 0;
-  decoderStats_g.lastPrimaryTimeStamp.time  = 0;
   decoderStats_g.eventLockWasLost        = decoderStats_g.currentPrimaryEvent;
   decoderStats_g.RPM                     = 0;
   decoderStats_g.lockLossCauseID         = reasonCode;
@@ -58,7 +57,6 @@ void resetDecoderStatus(uint8_t reasonCode) {
   }
 
   setCalcRequiredFlag();
-
   decoderReset();
 }
 

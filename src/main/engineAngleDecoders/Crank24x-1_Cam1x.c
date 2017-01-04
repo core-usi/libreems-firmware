@@ -32,14 +32,33 @@
 
 #include "common/interface.h"
 
+
+
 static inline void camSyncLogic(DecoderStats *decoderStats) {
-	if (decoderStats->decoderFlags.bits.crankLock) {
-		/* Correct phase if we are out */
-		if (decoderStats->currentPrimaryEvent < TOTAL_PHYSICAL_CRANK_TEETH) {
-			decoderStats->currentPrimaryEvent += TOTAL_PHYSICAL_CRANK_TEETH;
-		}
-		decoderStats->decoderFlags.bits.phaseLock = 1;
-	}
+
+  if (decoderStats->decoderFlags.bits.phaseLock) {
+    /* TODO Additional trickery needed, as when the coil on cyl #1 fires, it
+     *  causes a false cam sync pulse, even with the MAX chip. This is a known
+     *  issue, in the aftermarket ECU community, with the cam sync on the
+     *   Hayabuysa.
+     */
+  } else {
+    if (decoderStats->decoderFlags.bits.crankLock) {
+      if ((decoderStats->currentPrimaryEvent == 0) ||
+          (decoderStats->currentPrimaryEvent == TOTAL_PHYSICAL_CRANK_TEETH)) {
+        /* Correct phase if we are out */
+        if (decoderStats->currentPrimaryEvent != TOTAL_PHYSICAL_CRANK_TEETH) {
+          decoderStats->currentPrimaryEvent = 0;
+        }
+        decoderStats->decoderFlags.bits.phaseLock = 1;
+        decoderStats->decoderFlags.bits.minimalSync = 1;
+      } else {
+        /* TODO drop sync, missing tooth decoder failed */
+        resetDecoderStatus(FALSE_CRANK_SYNC);
+      }
+      }
+  }
+
 }
 
 #include "./common/Missing_Tooth.c"

@@ -262,6 +262,8 @@ void updateCylinderCalcs(uint8_t numCylinders) {
     ethanolOffset = TableLookupINT16(CoreVars->EthanolPercentage, TablesC.SmallTablesC.ETHvsIgnitionTable, IGN_VS_ETH_TABLE_LENGTH);
   }
 
+  int16_t totalMiscOffsets = decoderOffset + IATOffset + CLTOffset + ethanolOffset;
+
   uint8_t i;
   for (i = 0; i < numCylinders; ++i, ++cylinder) {
     /* Update Fuel */
@@ -293,22 +295,14 @@ void updateCylinderCalcs(uint8_t numCylinders) {
 
     /* Use TDC angle and subtract advance to get abs angle */
     startAngle = offsetAngle(cylinder->TDCAngle, DerivedVars->Advance);
-    /* Apply decoder offset */
-    startAngle = offsetAngle(startAngle, decoderOffset);
-    /* Apply IAT correction */
-    startAngle = offsetAngle(startAngle, IATOffset);
-    /* Apply CHT/CLT correction */
-    startAngle = offsetAngle(startAngle, CLTOffset);
-    /* Apply Ethanol correction */
-    startAngle = offsetAngle(startAngle, ethanolOffset);
+    /* Apply misc offsets */
+    startAngle = offsetAngle(startAngle, totalMiscOffsets);
     //FIXME temp code to record desired timing for reference
 //    if (i == 0) {
 //      getDecoderStats()->capturedAngle = offsetAngle(startAngle, -(Config.mechanicalProperties.decoderInputAngleOffset));
 //    }
     /* Apply dwell to spark angle */
     cylinder->igntionEvent->runTime = DerivedVars->Dwell;
-startAngle = offsetAngle(cylinder->TDCAngle, DerivedVars->Advance);
-startAngle = offsetAngle(startAngle, decoderOffset);
 
     dwellInDegrees = ((uint32_t)DerivedVars->Dwell
         * TICKS_PER_DEGREE_MULTIPLIER) / decoderStats->instantTicksPerDegree;
@@ -408,14 +402,15 @@ void updateCylinderCuts(uint8_t numCylinders, OperatingLimits *limits) {
 
 void updateTimedDerivatives(DerivedVar *derivedVariables) {
 
-  //TODO make a fixed or flex fuel config flag
-#if CONFIG == SEANKR1_ID
-  derivedVariables->StoichAFR = calculateAFR(CoreVars->EthanolPercentage);
-  derivedVariables->FuelDensity = calculateFuelDensity(CoreVars->EthanolPercentage);
-#else
-  derivedVariables->StoichAFR = Config.fuelingProperties.stoichiometricAFR;
-  derivedVariables->FuelDensity = Config.fuelingProperties.densityOfFuelAtSTP;
-#endif
+  /* See if we are flex-fuel aware */
+  if (Config.fuelingProperties.fuelAlgoFlags.flexFuel) {
+	derivedVariables->StoichAFR = calculateAFR(CoreVars->EthanolPercentage);
+	derivedVariables->FuelDensity = calculateFuelDensity(CoreVars->EthanolPercentage);
+  } else {
+	  derivedVariables->StoichAFR = Config.fuelingProperties.stoichiometricAFR;
+	  derivedVariables->FuelDensity = Config.fuelingProperties.densityOfFuelAtSTP;
+  }
+
   derivedVariables->Displacement = Config.mechanicalProperties.perCylinderVolume;
   FuelAttribs.primaryInjFlow = Config.fuelingProperties.injectorFlow;
   FuelAttribs.secondaryInjFlow = Config.fuelingProperties.secondaryInjectorFlow;
@@ -450,7 +445,7 @@ void updateCoreData(MasterConfig *config) {
   CoreVars->BRV = (((uint32_t)ADCBuffers0.BRV * BRV_RANGE) / ADC_DIVISIONS) + BRV_MINIMUM;
   CoreVars->CHT = CHTTransferTable[ADCBuffers0.CHT];
   CoreVars->IAT = IATTransferTable[ADCBuffers0.IAT];
-  CoreVars->MAT = CoreVars->IAT;
+  CoreVars->MAT = IATTransferTable[ADCBuffers0.MAT];
   /* RPM only duplicated here to prevent breakage with EMSTune */
   CoreVars->RPM = getDecoderStats()->RPM;
   CoreVars->EthanolPercentage = readFlexFuelEth();

@@ -36,10 +36,7 @@
 
 
 /* Statics */
-static ExtendedTime previousPrimaryInputTimeStamp;
 static uint16_t     previousPrimaryTicksPerDegree;
-static ExtendedTime previousTimePeriod;
-
 static uint8_t      consecutiveEvenTeethFound;
 
 
@@ -58,6 +55,7 @@ void pulseAccumulatorOverflowISR() {
 }
 
 void decoderReset() {
+  consecutiveEvenTeethFound = 0;
 }
 
 void PrimaryEngineAngle() {
@@ -85,7 +83,7 @@ void PrimaryEngineAngle() {
 		uint16_t     ratioBetweenCurrentAndLast;
 		ExtendedTime interEventPeriod;
 
-		interEventPeriod.time = diffUint32(timeStamp.time, previousPrimaryInputTimeStamp.time);
+		interEventPeriod.time = diffUint32(timeStamp.time, decoderStats_g.lastPrimaryTimeStamp.time);
 		ticksPerDegree = ((uint32_t)(TICKS_PER_DEGREE_MULTIPLIER * interEventPeriod.time)) / ANGLE_BETWEEN_TEETH;
 
 		 /* Check sync and schedule */
@@ -134,9 +132,10 @@ void PrimaryEngineAngle() {
 			 * then we should allow 20% for the next physical tooth(10+10),
 			 * since we moved twice as many crank degrees.
 			 */
-			allowedTollerance *= allowedTolleranceScaler;
+			uint16_t adjustedTollerance = TACH_INPUT_RATIO(100.0);
+			adjustedTollerance -= (adjustedTollerance - allowedTollerance) * allowedTolleranceScaler;
 
-			if (ratioBetweenCurrentAndLast < allowedTollerance) {
+			if (ratioBetweenCurrentAndLast < adjustedTollerance) {
 				if (decoderStats_g.instantTicksPerDegree < previousPrimaryTicksPerDegree) {
 					resetDecoderStatus(PRIMARY_EVENT_TOO_SOON);
 				} else {
@@ -187,37 +186,48 @@ void PrimaryEngineAngle() {
 			uint16_t allowedTollerance = Config.tachDecoderSettings.inputEventCrankingTollerance;
 
 			//TODO add additional checks for correct TPD direction
-			if ((ratioBetweenCurrentAndLast < allowedTollerance) &&
-					ticksPerDegree > previousPrimaryTicksPerDegree) {
-				/* see if we have seen a min number of skip teeth */
-				if (consecutiveEvenTeethFound > 3) {
-					ticksPerDegree /= 2; /* mul by num of missing teeth plus 1 */
-					ratioBetweenCurrentAndLast = mul16(ratioBetweenCurrentAndLast, 2);
+		  /* Greater than for missing tooth, less than for added tooth */
+      if (ratioBetweenCurrentAndLast < allowedTollerance) {
+        /* see if we have seen a min number of skip teeth */
+        if (consecutiveEvenTeethFound > 3) {
+          /* Correct ticks per degree */
+          uint16_t ticksPerDegreeAdjusted = ticksPerDegree
+              / (MISSING_CRANK_TEETH + 1);
+          /* Recalc TPD */
+          ratioBetweenCurrentAndLast = ratio16(previousPrimaryTicksPerDegree,
+              ticksPerDegreeAdjusted, DECODER_STAMP_RATIO_F);
+          /* Here we apply an allowed tolerance scaler.
+           * If we go over a missing tooth and our tolerance is say 10%,
+           * then we should allow 20% for the next physical tooth(10+10),
+           * since we moved twice as many crank degrees.
+           */
+          uint16_t adjustedTollerance = TACH_INPUT_RATIO(100.0);
+          adjustedTollerance -= (adjustedTollerance - allowedTollerance) * (1 + MISSING_CRANK_TEETH);
 
-					//TODO correct allowedTollerance by adding total between missing teeth
-					if (ratioBetweenCurrentAndLast < allowedTollerance) {
-						consecutiveEvenTeethFound = 0;
-						if (ticksPerDegree < previousPrimaryTicksPerDegree) {
-							resetDecoderStatus(PRIMARY_EVENT_TOO_SOON_UNSYNC);
-						} else {
-							resetDecoderStatus(PRIMARY_EVENT_TOO_LATE_UNSYNC);
-						}
-						return;
-					} else {
-						decoderStats_g.decoderFlags.bits.crankLock = 1;
-						decoderStats_g.decoderFlags.bits.minimalSync = 1; /* TODO make a config item */
-						decoderStats_g.currentPrimaryEvent = 0;
-					}
-				} else {
-					consecutiveEvenTeethFound = 0;
-				}
+          if (ratioBetweenCurrentAndLast < adjustedTollerance) {
+            if (ticksPerDegreeAdjusted < previousPrimaryTicksPerDegree) {
+              resetDecoderStatus(PRIMARY_EVENT_TOO_SOON_UNSYNC);
+            } else {
+              resetDecoderStatus(PRIMARY_EVENT_TOO_LATE_UNSYNC);
+            }
+            return;
+          } else {
+            ticksPerDegree = ticksPerDegreeAdjusted;
+            decoderStats_g.decoderFlags.bits.crankLock = 1;
+            if (Config.tachDecoderSettings.minimalSyncRequired == CRANK_ONLY) {
+              decoderStats_g.decoderFlags.bits.minimalSync = 1;
+            }
+            decoderStats_g.currentPrimaryEvent = 0;
+          }
+        } else {
+          consecutiveEvenTeethFound = 0;
+        }
 
-			} else {
+      } else {
 				++consecutiveEvenTeethFound;
 			}
 			decoderStats_g.instantTicksPerDegree = ticksPerDegree; /* Record for cranking RPM log */
 		}
-		previousTimePeriod = interEventPeriod;
 	} else {
 
 	}
@@ -227,7 +237,7 @@ void PrimaryEngineAngle() {
 		decoderStats_g.decoderFlags.bits.primaryPeriodValid = 1;
 	}
 
-	previousPrimaryInputTimeStamp = timeStamp;
+	decoderStats_g.lastPrimaryTimeStamp = timeStamp;
 	decoderStats_g.decoderFlags.bits.previousPrimaryEventValid = 1;
 
 }

@@ -44,13 +44,13 @@
 #define MAX_INJ_DUTY_CYCLE          85.0  /* Percent */
 #define MAX_INJ_DC_SECONDARY        85.0  /* Percent */
 #define INJECTION_STRATEGY          STAGED_EXTENSION
-#define PRIMARY_FUELING_ALGORITHM   ALGO_MAF
+#define PRIMARY_FUELING_ALGORITHM   ALGO_SPEED_DENSITY
 
-#define MAX_RPM_CRANKING                 1000     /* Max RPM at which the ECU will consider it to be in cranking mode */
+#define MAX_RPM_CRANKING                  600     /* Max RPM at which the ECU will consider it to be in cranking mode */
 #define PRIMARY_SKIP_EDGES                  0
-#define PRIMARY_INPUT_TOLLERANCE           80.0   /* Difference allowed in percentage */
-#define PRIMARY_INPUT_TOLLERANCE_CRANKING  20.0   /* Difference allowed in percentage */
-#define FILTER_ENABLE_RPM                2000.0   /* RPM to start filtering tach signal */
+#define PRIMARY_INPUT_TOLLERANCE           88.0   /* Difference allowed in percentage */
+#define PRIMARY_INPUT_TOLLERANCE_CRANKING  64.0   /* Difference allowed in percentage */
+#define FILTER_ENABLE_RPM                 MAX_RPM_CRANKING  /* RPM to start filtering tach signal */
 #define MIN_SYNC_REQUIRED                 CRANK_AND_CAM
 
 #define MAP_MAXIMUM                 260
@@ -82,8 +82,8 @@
 #define VSS_DIVISOR                 30
 
 /* WARNING capture edges may be over written by decoder */
-#define ECT0_CAPTURE_RISING         TRUE
-#define ECT0_CAPTURE_FALLING        FALSE
+#define ECT0_CAPTURE_RISING         FALSE
+#define ECT0_CAPTURE_FALLING        TRUE
 #define ECT1_CAPTURE_RISING         FALSE
 #define ECT1_CAPTURE_FALLING        TRUE
 #define ECT2_CAPTURE_RISING         TRUE
@@ -119,14 +119,9 @@
 #define DERATE_L1_MAP_MAX_IGNITION_DISABLE    125
 #define DERATE_L1_MAP_IGNITION_REENABLE       120
 
-/* Offset now only subtracts from a base TDC angle, so if TDC is 427.5 deg
- * you *should* specify a TDC of 450 (or the next hard edge) and specify an
- * offset of 22.5 to get it to 427.5. You can actually specify a TDC at a
- * soft angle, but since other angle based functions require hard edges it
- * can make your config harder to follow.
- */
-#define INPUT_OFFSET			          ENGINE_ANGLE_S(22.5)
-#define ENGINE_CYL_VOLUME		        CC_VOLUME_S(250)
+
+#define INPUT_OFFSET			          ENGINE_ANGLE_S(0)
+#define ENGINE_CYL_VOLUME		        CC_VOLUME_S(325)
 #define SPECIFIED_OPERATING_LEVELS  3
 
 /*
@@ -135,30 +130,30 @@
  *
  */
 
-#define CYL_1_TDC_ANGLE             450         /* TDC angle */
+#define CYL_1_TDC_ANGLE             135         /* TDC angle */
 #define CYL_1_INJ_ANGLE             135         /* Angle to inject Fuel */
-#define CYL_1_READ_ANGLE            90          /* Angle to sample sensors */
+#define CYL_1_READ_ANGLE            135          /* Angle to sample sensors */
 #define CYL_1_IGN_CH                0           /* XGate ignition channel  */
 #define CYL_1_PRIMARY_INJ_CH        4           /* XGate primary fuel channel */
 #define CYL_1_SECONDARY_INJ_CH      8           /* XGate secondary fuel channel */
 
-#define CYL_2_TDC_ANGLE             630         /* TDC angle */
-#define CYL_2_INJ_ANGLE             315         /* Angle to inject Fuel */
-#define CYL_2_READ_ANGLE            270         /* Angle to sample sensors */
+#define CYL_2_TDC_ANGLE             315         /* TDC angle */
+#define CYL_2_INJ_ANGLE             135         /* Angle to inject Fuel */
+#define CYL_2_READ_ANGLE            135         /* Angle to sample sensors */
 #define CYL_2_IGN_CH                1           /* XGate ignition channel */
 #define CYL_2_PRIMARY_INJ_CH        5           /* XGate primary fuel channel */
 #define CYL_2_SECONDARY_INJ_CH      9           /* XGate secondary fuel channel */
 
-#define CYL_3_TDC_ANGLE             270         /* TDC angle */
-#define CYL_3_INJ_ANGLE             675         /* Angle to inject Fuel */
-#define CYL_3_READ_ANGLE            630         /* Angle to sample sensors */
+#define CYL_3_TDC_ANGLE             675         /* TDC angle */
+#define CYL_3_INJ_ANGLE             135         /* Angle to inject Fuel */
+#define CYL_3_READ_ANGLE            135         /* Angle to sample sensors */
 #define CYL_3_IGN_CH                2           /* XGate ignition channel */
 #define CYL_3_PRIMARY_INJ_CH        6           /* XGate primary fuel channel */
 #define CYL_3_SECONDARY_INJ_CH      10          /* XGate secondary fuel channel */
 
-#define CYL_4_TDC_ANGLE             90          /* TDC angle */
-#define CYL_4_INJ_ANGLE             495         /* Angle to inject Fuel */
-#define CYL_4_READ_ANGLE            450         /* Angle to sample sensors */
+#define CYL_4_TDC_ANGLE             495          /* TDC angle */
+#define CYL_4_INJ_ANGLE             135         /* Angle to inject Fuel */
+#define CYL_4_READ_ANGLE            135         /* Angle to sample sensors */
 #define CYL_4_IGN_CH                3           /* XGate ignition channel */
 #define CYL_4_PRIMARY_INJ_CH        7           /* XGate primary fuel channel */
 #define CYL_4_SECONDARY_INJ_CH      11          /* XGate secondary fuel channel */
@@ -301,6 +296,67 @@
 #define GPIO_4_CHILD_ID              0
 #define GPIO_4_IS_OUTPUT             TRUE
 #define GPIO_4_HAS_CHILD             FALSE
+
+/* Under temperature de-rate */
+#define GPIO_5_ENABLED               TRUE
+#define GPIO_5_VARIABLE              &ADCBuffers0.SpareADC5
+#define GPIO_5_UPPER_BOUNDARY        AV(4.50)
+#define GPIO_5_LOWER_BOUNDARY        AV(4.00)
+#define GPIO_5_REGISTER              (uint8_t*)&PORTC
+#define GPIO_5_BIT_MASK              BIT5
+#define GPIO_5_TRIGGER_HIGH          FALSE
+#define GPIO_5_OUTPUT_POLARITY       GPO_POLARITY_ENABLED_HIGH
+#define GPIO_5_IS_PARENT             TRUE
+#define GPIO_5_DERATE                TRUE
+#define GPIO_5_DERATE_LEVEL          DERATE_LEVEL_ONE_LIMITS_INDEX
+#define GPIO_5_CHILD_ID              0
+#define GPIO_5_IS_OUTPUT             TRUE
+#define GPIO_5_HAS_CHILD             FALSE  /* TODO chain this to RPM (see fan config) */
+
+#define GPIO_6_ENABLED               FALSE
+#define GPIO_6_VARIABLE              0
+#define GPIO_6_UPPER_BOUNDARY        0
+#define GPIO_6_LOWER_BOUNDARY        0
+#define GPIO_6_REGISTER              GPO_NULL_REGISTER_ADDRESS
+#define GPIO_6_BIT_MASK              0
+#define GPIO_6_TRIGGER_HIGH          FALSE
+#define GPIO_6_OUTPUT_POLARITY       GPO_POLARITY_ENABLED_HIGH
+#define GPIO_6_IS_PARENT             TRUE
+#define GPIO_6_DERATE                TRUE
+#define GPIO_6_DERATE_LEVEL          DERATE_LEVEL_ONE_LIMITS_INDEX
+#define GPIO_6_CHILD_ID              0
+#define GPIO_6_IS_OUTPUT             TRUE
+#define GPIO_6_HAS_CHILD             FALSE
+
+#define GPIO_7_ENABLED               FALSE
+#define GPIO_7_VARIABLE              0
+#define GPIO_7_UPPER_BOUNDARY        0
+#define GPIO_7_LOWER_BOUNDARY        0
+#define GPIO_7_REGISTER              GPO_NULL_REGISTER_ADDRESS
+#define GPIO_7_BIT_MASK              0
+#define GPIO_7_TRIGGER_HIGH          FALSE
+#define GPIO_7_OUTPUT_POLARITY       GPO_POLARITY_ENABLED_HIGH
+#define GPIO_7_IS_PARENT             TRUE
+#define GPIO_7_DERATE                TRUE
+#define GPIO_7_DERATE_LEVEL          DERATE_LEVEL_ONE_LIMITS_INDEX
+#define GPIO_7_CHILD_ID              0
+#define GPIO_7_IS_OUTPUT             TRUE
+#define GPIO_7_HAS_CHILD             FALSE
+
+#define GPIO_8_ENABLED               FALSE
+#define GPIO_8_VARIABLE              0
+#define GPIO_8_UPPER_BOUNDARY        0
+#define GPIO_8_LOWER_BOUNDARY        0
+#define GPIO_8_REGISTER              GPO_NULL_REGISTER_ADDRESS
+#define GPIO_8_BIT_MASK              0
+#define GPIO_8_TRIGGER_HIGH          FALSE
+#define GPIO_8_OUTPUT_POLARITY       GPO_POLARITY_ENABLED_HIGH
+#define GPIO_8_IS_PARENT             TRUE
+#define GPIO_8_DERATE                TRUE
+#define GPIO_8_DERATE_LEVEL          DERATE_LEVEL_ONE_LIMITS_INDEX
+#define GPIO_8_CHILD_ID              0
+#define GPIO_8_IS_OUTPUT             TRUE
+#define GPIO_8_HAS_CHILD             FALSE
 
 /* Sensor Ranges */
 #define TPS_MINIMUM (0)
