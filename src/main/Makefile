@@ -1,5 +1,5 @@
 #	LibreEMS - the community driven open source engine management system
-#	Copyright 2014-2016 David Andruczyk, Sean Keys
+#	Copyright 2014-2017 David Andruczyk, Sean Keys
 #
 #	FreeEMS - the open source engine management system
 #
@@ -1038,7 +1038,7 @@ zipmain: distributiondir
 zipdocs: distributiondir
 	cd ..$(PATHSEP)..$(PATHSEP) ; git archive --format=zip --prefix=$(LABEL)- HEAD docs$(PATHSEP) > .$(PATHSEP)tmp$(PATHSEP)$(DISTRIBUTIONDIR)$(PATHSEP)$(LABEL)-docs.zip;cd -
 
-gendoxy: clean
+gendoxy:
 	cd ..$(PATHSEP)..$(PATHSEP) ; ( cat docs$(PATHSEP)Doxyfile ; echo "PROJECT_NUMBER=$(FIRMWARE_VERSION)" ) | doxygen - | grep Warning > src$(PATHSEP)doxygen.output;cd -
 
 zipsite: distributiondir gendoxy
