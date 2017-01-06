@@ -51,6 +51,8 @@
 #define PRIMARY_INPUT_TOLLERANCE           80.0   /* Difference allowed in percentage */
 #define PRIMARY_INPUT_TOLLERANCE_CRANKING  20.0   /* Difference allowed in percentage */
 #define FILTER_ENABLE_RPM                2000.0   /* RPM to start filtering tach signal */
+#define SYNC_SEARCH_TOLLERANCE              0     /* Does not apply to R1 */
+
 #define MIN_SYNC_REQUIRED                 CRANK_AND_CAM
 
 #define MAP_MAXIMUM                 260
@@ -301,6 +303,67 @@
 #define GPIO_4_CHILD_ID              0
 #define GPIO_4_IS_OUTPUT             TRUE
 #define GPIO_4_HAS_CHILD             FALSE
+
+/* Under temperature de-rate */
+#define GPIO_5_ENABLED               FALSE
+#define GPIO_5_VARIABLE              0
+#define GPIO_5_UPPER_BOUNDARY        0
+#define GPIO_5_LOWER_BOUNDARY        0
+#define GPIO_5_REGISTER              GPO_NULL_REGISTER_ADDRESS
+#define GPIO_5_BIT_MASK              BIT5
+#define GPIO_5_TRIGGER_HIGH          FALSE
+#define GPIO_5_OUTPUT_POLARITY       GPO_POLARITY_ENABLED_HIGH
+#define GPIO_5_IS_PARENT             TRUE
+#define GPIO_5_DERATE                TRUE
+#define GPIO_5_DERATE_LEVEL          DERATE_LEVEL_ONE_LIMITS_INDEX
+#define GPIO_5_CHILD_ID              0
+#define GPIO_5_IS_OUTPUT             TRUE
+#define GPIO_5_HAS_CHILD             FALSE  /* TODO chain this to RPM (see fan config) */
+
+#define GPIO_6_ENABLED               FALSE
+#define GPIO_6_VARIABLE              0
+#define GPIO_6_UPPER_BOUNDARY        0
+#define GPIO_6_LOWER_BOUNDARY        0
+#define GPIO_6_REGISTER              GPO_NULL_REGISTER_ADDRESS
+#define GPIO_6_BIT_MASK              0
+#define GPIO_6_TRIGGER_HIGH          FALSE
+#define GPIO_6_OUTPUT_POLARITY       GPO_POLARITY_ENABLED_HIGH
+#define GPIO_6_IS_PARENT             TRUE
+#define GPIO_6_DERATE                TRUE
+#define GPIO_6_DERATE_LEVEL          DERATE_LEVEL_ONE_LIMITS_INDEX
+#define GPIO_6_CHILD_ID              0
+#define GPIO_6_IS_OUTPUT             TRUE
+#define GPIO_6_HAS_CHILD             FALSE
+
+#define GPIO_7_ENABLED               FALSE
+#define GPIO_7_VARIABLE              0
+#define GPIO_7_UPPER_BOUNDARY        0
+#define GPIO_7_LOWER_BOUNDARY        0
+#define GPIO_7_REGISTER              GPO_NULL_REGISTER_ADDRESS
+#define GPIO_7_BIT_MASK              0
+#define GPIO_7_TRIGGER_HIGH          FALSE
+#define GPIO_7_OUTPUT_POLARITY       GPO_POLARITY_ENABLED_HIGH
+#define GPIO_7_IS_PARENT             TRUE
+#define GPIO_7_DERATE                TRUE
+#define GPIO_7_DERATE_LEVEL          DERATE_LEVEL_ONE_LIMITS_INDEX
+#define GPIO_7_CHILD_ID              0
+#define GPIO_7_IS_OUTPUT             TRUE
+#define GPIO_7_HAS_CHILD             FALSE
+
+#define GPIO_8_ENABLED               FALSE
+#define GPIO_8_VARIABLE              0
+#define GPIO_8_UPPER_BOUNDARY        0
+#define GPIO_8_LOWER_BOUNDARY        0
+#define GPIO_8_REGISTER              GPO_NULL_REGISTER_ADDRESS
+#define GPIO_8_BIT_MASK              0
+#define GPIO_8_TRIGGER_HIGH          FALSE
+#define GPIO_8_OUTPUT_POLARITY       GPO_POLARITY_ENABLED_HIGH
+#define GPIO_8_IS_PARENT             TRUE
+#define GPIO_8_DERATE                TRUE
+#define GPIO_8_DERATE_LEVEL          DERATE_LEVEL_ONE_LIMITS_INDEX
+#define GPIO_8_CHILD_ID              0
+#define GPIO_8_IS_OUTPUT             TRUE
+#define GPIO_8_HAS_CHILD             FALSE
 
 /* Sensor Ranges */
 #define TPS_MINIMUM (0)
