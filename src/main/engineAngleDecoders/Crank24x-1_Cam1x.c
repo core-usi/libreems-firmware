@@ -44,11 +44,11 @@ static inline void camSyncLogic(DecoderStats *decoderStats) {
      */
   } else {
     if (decoderStats->decoderFlags.bits.crankLock) {
-      if ((decoderStats->currentPrimaryEvent == 0) ||
-          (decoderStats->currentPrimaryEvent == TOTAL_PHYSICAL_CRANK_TEETH)) {
+      if ((decoderStats->currentPrimaryEvent == TOTAL_ENGINE_CYCLE_INDEXES) ||
+          (decoderStats->currentPrimaryEvent == TOTAL_CRANK_INDEXES)) {
         /* Correct phase if we are out */
-        if (decoderStats->currentPrimaryEvent != TOTAL_PHYSICAL_CRANK_TEETH) {
-          decoderStats->currentPrimaryEvent = 0;
+        if (decoderStats->currentPrimaryEvent != TOTAL_CRANK_INDEXES) {
+          decoderStats->currentPrimaryEvent = TOTAL_CRANK_INDEXES;
         }
         decoderStats->decoderFlags.bits.phaseLock = 1;
         decoderStats->decoderFlags.bits.minimalSync = 1;
