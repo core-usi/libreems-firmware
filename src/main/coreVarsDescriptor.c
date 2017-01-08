@@ -129,7 +129,14 @@ const dataBlockDescriptor coreVarsDescriptor[] FD_BASE_PAGE = {
     .ID = EP_DID,
     .start = offsetof(CoreVar, EthanolPercentage),
     .CANid = 0x110
-  }
+  },
+  {
+    .ID = ANG_DID,
+    .name = CVD_ENGINE_ANGLE_LOG,
+    .description = CVD_ENGINE_ANGLE,
+    .start = offsetof(CoreVar, currentEngineAngle),
+    .CANid = 0x111
+  },
 };
 
 

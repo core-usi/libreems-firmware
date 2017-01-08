@@ -176,11 +176,15 @@ const dataBlockDescriptor KeyUserVarsDescriptor[] KUVD_BASE_PAGE ={
     .start = offsetof(KeyUserDebug, CANframesRx),
     .name = KUVD_CAN_RX_FRAMES,
     .description = KUVD_NUMBER_OF_FRAMES_RECEIVED_ON_CAN_BUS_0,
+  },
+  {
+    .ID = FP_DID,
+    .start = offsetof(KeyUserDebug, engineOilPressure),
+    .name = KUVD_OIL_PRESSURE_LOG,
+    .description = KUVD_OIL_PRESSURE,
   }
 };
 
 
 //CASSERT((sizeof(KeyUserDebug) / sizeof(uint16_t)) == (sizeof(KeyUserVarsDescriptor) / sizeof(dataBlockDescriptor)), DATALOGDEFINITIONS_C) // At least check for correct number of entries
 const uint8_t KeyUserVarsDescriptorCnt = (sizeof(KeyUserVarsDescriptor) / sizeof(dataBlockDescriptor));
-
-/* ex: set tabstop=2 shiftwidth=2 expandtab softtabstop=2: */

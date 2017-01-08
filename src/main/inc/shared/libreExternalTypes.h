@@ -128,6 +128,7 @@ typedef enum {
   AV_DID         = 62,
   GS_DID         = 63,
   OILP_DID       = 64,
+  CEA_DID        = 65,
 
   NOT_USED_DID   = 254,
   UNDEF_DID      = 255,

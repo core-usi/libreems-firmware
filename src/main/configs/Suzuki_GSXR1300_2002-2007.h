@@ -46,10 +46,12 @@
 #define INJECTION_STRATEGY          STAGED_EXTENSION
 #define PRIMARY_FUELING_ALGORITHM   ALGO_SPEED_DENSITY
 
-#define MAX_RPM_CRANKING                  600     /* Max RPM at which the ECU will consider it to be in cranking mode */
+#define MAX_RPM_CRANKING                 1000.0     /* Max RPM at which the ECU will consider it to be in cranking mode */
 #define PRIMARY_SKIP_EDGES                  0
-#define PRIMARY_INPUT_TOLLERANCE           88.0   /* Difference allowed in percentage */
-#define PRIMARY_INPUT_TOLLERANCE_CRANKING  64.0   /* Difference allowed in percentage */
+#define PRIMARY_INPUT_TOLLERANCE           80.0   /* Difference allowed in percentage */
+#define PRIMARY_INPUT_TOLLERANCE_CRANKING  20.0   /* Difference allowed in percentage */
+#define SYNC_SEARCH_TOLLERANCE             70.0   /* A logic analyzer is needed to find this */
+
 #define FILTER_ENABLE_RPM                 MAX_RPM_CRANKING  /* RPM to start filtering tach signal */
 #define MIN_SYNC_REQUIRED                 CRANK_AND_CAM
 
@@ -100,10 +102,10 @@
 #define ECT7_CAPTURE_FALLING        TRUE
 
 /* Ultimate Limits */
-#define RPM_FUEL_DISABLE            11950  /* Max RPM allowed before fuel is cut */
-#define RPM_FUEL_REENABLE           11800  /* RPM to re-enable fueling */
-#define RPM_IGNITION_DISABLE        12000  /* Max RPM allowed before ignition is cut */
-#define RPM_IGNTTION_REENABLE       11900  /* RPM at which to re-enable ignition */
+#define RPM_FUEL_DISABLE            10500  /* Max RPM allowed before fuel is cut */
+#define RPM_FUEL_REENABLE           10300  /* RPM to re-enable fueling */
+#define RPM_IGNITION_DISABLE        10500  /* Max RPM allowed before ignition is cut */
+#define RPM_IGNTTION_REENABLE       10300  /* RPM at which to re-enable ignition */
 #define MAP_MAX_FUEL_DISABLE        166    /* Max KPA allowed before fuel is cut */
 #define MAP_FUEL_RENABLE            140    /* KPA at which to re-enable fueling */
 #define MAP_MAX_IGNITION_DISABLE    170    /* Max KPA before ignition is cut */
@@ -120,7 +122,7 @@
 #define DERATE_L1_MAP_IGNITION_REENABLE       120
 
 
-#define INPUT_OFFSET			          ENGINE_ANGLE_S(0)
+#define INPUT_OFFSET			        ENGINE_ANGLE_S(0)
 #define ENGINE_CYL_VOLUME		        CC_VOLUME_S(325)
 #define SPECIFIED_OPERATING_LEVELS  3
 
@@ -128,30 +130,33 @@
  *
  * Engine angle specific settings
  *
+ * Injection angle currently hops to the previous hard-edge specified.
+ * IE 135 will jump to 120 when using a 24x crank wheel.
+ *
  */
 
-#define CYL_1_TDC_ANGLE             135         /* TDC angle */
+#define CYL_1_TDC_ANGLE             105         /* TDC angle */
 #define CYL_1_INJ_ANGLE             135         /* Angle to inject Fuel */
-#define CYL_1_READ_ANGLE            135          /* Angle to sample sensors */
+#define CYL_1_READ_ANGLE            135         /* Angle to sample sensors */
 #define CYL_1_IGN_CH                0           /* XGate ignition channel  */
 #define CYL_1_PRIMARY_INJ_CH        4           /* XGate primary fuel channel */
 #define CYL_1_SECONDARY_INJ_CH      8           /* XGate secondary fuel channel */
 
-#define CYL_2_TDC_ANGLE             315         /* TDC angle */
+#define CYL_2_TDC_ANGLE             285         /* TDC angle */
 #define CYL_2_INJ_ANGLE             135         /* Angle to inject Fuel */
 #define CYL_2_READ_ANGLE            135         /* Angle to sample sensors */
 #define CYL_2_IGN_CH                1           /* XGate ignition channel */
 #define CYL_2_PRIMARY_INJ_CH        5           /* XGate primary fuel channel */
 #define CYL_2_SECONDARY_INJ_CH      9           /* XGate secondary fuel channel */
 
-#define CYL_3_TDC_ANGLE             675         /* TDC angle */
+#define CYL_3_TDC_ANGLE             645         /* TDC angle */
 #define CYL_3_INJ_ANGLE             135         /* Angle to inject Fuel */
 #define CYL_3_READ_ANGLE            135         /* Angle to sample sensors */
 #define CYL_3_IGN_CH                2           /* XGate ignition channel */
 #define CYL_3_PRIMARY_INJ_CH        6           /* XGate primary fuel channel */
 #define CYL_3_SECONDARY_INJ_CH      10          /* XGate secondary fuel channel */
 
-#define CYL_4_TDC_ANGLE             495          /* TDC angle */
+#define CYL_4_TDC_ANGLE             465          /* TDC angle */
 #define CYL_4_INJ_ANGLE             135         /* Angle to inject Fuel */
 #define CYL_4_READ_ANGLE            135         /* Angle to sample sensors */
 #define CYL_4_IGN_CH                3           /* XGate ignition channel */
@@ -681,11 +686,11 @@
 
 
 /* FUEL (VE) Table(s) */
-#define VE_TABLE_RPM_LENGTH          25
+#define VE_TABLE_RPM_LENGTH          16
 #define VE_TABLE_LOAD_LENGTH         16
-#define VE_RPM_AXIS_PRIMARY          "../data/tables/axis/SeansR1-RPM-25.h"
-#define VE_LOAD_AXIS_PRIMARY         "../data/tables/axis/SeansR1-Load-16.h"
-#define VE_TABLE_PRIMARY             "../data/tables/ve/SeansR1-VE25RPMx16Load.h"
+#define VE_RPM_AXIS_PRIMARY          "../data/tables/axis/SeansHayabusa-RPM-16.h"
+#define VE_LOAD_AXIS_PRIMARY         "../data/tables/axis/SeansHayabusa-Load-16.h"
+#define VE_TABLE_PRIMARY             "../data/tables/ve/SeansHayabusa-VE16RPMx16Load.h"
 #define VE_RPM_AXIS_SECONDARY        "../data/tables/axis/DefaultWith400Spacing-RPM-27.h"
 #define VE_LOAD_AXIS_SECONDARY       "../data/tables/axis/DefaultWith10and20SplitSpacing-Load-21.h"
 #define VE_TABLE_SECONDARY           "../data/tables/ve/Default-VE24RPMx19Load.h"
@@ -697,17 +702,17 @@
   
 /* Lambda Table */
 #define LAMBDA_TABLE_RPM_LENGTH      16
-#define LAMBDA_TABLE_LOAD_LENGTH     15
-#define LAMBDA_RPM_AXIS              "../data/tables/axis/SeansR1-RPM-16.h"
-#define LAMBDA_LOAD_AXIS             "../data/tables/axis/SeansR1-Load-16.h"
+#define LAMBDA_TABLE_LOAD_LENGTH     16
+#define LAMBDA_RPM_AXIS              "../data/tables/axis/SeansHayabusa-RPM-16.h"
+#define LAMBDA_LOAD_AXIS             "../data/tables/axis/SeansHayabusa-Load-16.h"
 #define LAMBDA_TABLE                 "../data/tables/lambda/Generic-Lambda16RPMx16Load.h"
 
 /* Ignition Table */
-#define IGNITION_TABLE_RPM_LENGTH    25
+#define IGNITION_TABLE_RPM_LENGTH    16
 #define IGNITION_TABLE_LOAD_LENGTH   16
-#define IGNITION_RPM_AXIS_PRIMARY    "../data/tables/axis/SeansR1-RPM-25.h"
-#define IGNITION_LOAD_AXIS_PRIMARY   "../data/tables/axis/SeansR1-Load-16.h"
-#define IGNITION_TABLE_PRIMARY       "../data/tables/ign/SeansR1-Timing25RPMx16Load.h"
+#define IGNITION_RPM_AXIS_PRIMARY    "../data/tables/axis/SeansHayabusa-RPM-16.h"
+#define IGNITION_LOAD_AXIS_PRIMARY   "../data/tables/axis/SeansHayabusa-Load-16.h"
+#define IGNITION_TABLE_PRIMARY       "../data/tables/ign/SeansHayabusa-Timing16RPMx16Load.h"
 #define IGNITION_RPM_AXIS_SECONDARY  "../data/tables/axis/DefaultWith400Spacing-RPM-27.h"
 #define IGNITION_LOAD_AXIS_SECONDARY "../data/tables/axis/DefaultWith10and20SplitSpacing-Load-21.h"
 #define IGNITION_TABLE_SECONDARY     "../data/tables/ign/Default-Timing24RPMx19Load.h"

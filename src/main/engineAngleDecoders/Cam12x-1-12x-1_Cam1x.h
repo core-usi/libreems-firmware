@@ -36,17 +36,18 @@
 #define TOTAL_CRANK_TEETH             12  /* It's actually a 12-1-12-1 Cam wheel */
 #define MISSING_CRANK_TEETH            1
 
-#define TOTAL_PHYSICAL_CRANK_TEETH       (TOTAL_CRANK_TEETH - MISSING_CRANK_TEETH)
-#define TOTAL_ENGINE_CYCLE_INDEXES       ((TOTAL_PHYSICAL_CRANK_TEETH * 2) - 1)
-#define ANGLE_BETWEEN_TEETH              ENGINE_ANGLE_S((360 / TOTAL_CRANK_TEETH))
+#define TOTAL_PHYSICAL_CRANK_TEETH  (TOTAL_CRANK_TEETH - MISSING_CRANK_TEETH)
+#define TOTAL_CRANK_INDEXES         (TOTAL_PHYSICAL_CRANK_TEETH - 1)
+#define TOTAL_ENGINE_CYCLE_INDEXES  ((TOTAL_PHYSICAL_CRANK_TEETH * 2) - 1)
+#define ANGLE_BETWEEN_TEETH         ENGINE_ANGLE_S((360 / TOTAL_CRANK_TEETH))
 
 //TODO standardize this for all missing tooth decoders
 static inline uint16_t getAngle(uint8_t index) {
-	uint16_t angleAdder = 0;
+  uint16_t angleAdder = 0;
 
-  if (index > TOTAL_PHYSICAL_CRANK_TEETH) {
-	  angleAdder = ANGLE_BETWEEN_TEETH * MISSING_CRANK_TEETH;
-	}
+  if (index > TOTAL_CRANK_INDEXES) {
+    angleAdder = ANGLE_BETWEEN_TEETH * MISSING_CRANK_TEETH;
+  }
   return ((index * ANGLE_BETWEEN_TEETH) + angleAdder);
 }
 

@@ -175,6 +175,7 @@ typedef struct {
 typedef struct{
   uint16_t inputEventTollerance;
   uint16_t inputEventCrankingTollerance;
+  uint16_t syncSearchTollerance;
   uint16_t maxCrankingRPM;
   uint16_t filterBypassRPM;
   uint8_t  primaryEventSkipEdges;

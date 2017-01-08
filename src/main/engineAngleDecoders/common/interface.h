@@ -50,12 +50,13 @@ extern volatile uint16_t     timerExtensionCounter_g;
 
 DecoderStats* getDecoderStats();
 void resetDecoderStatus(uint8_t reasonCode) TEXT;
-void decoderSpecificInit() TEXT;
-void decoderReset() TEXT;
+void decoderSpecificInit()                  TEXT;
+void decoderReset()                         TEXT;
+uint16_t getInstantAngle(void)              TEXT1;
+
 
 void SecondaryEngineAngle(void)        ISR TEXT;
 void PrimaryEngineAngle(void)          ISR TEXT;
-void getCapturedAngle(void)            ISR TEXT;
 void pulseAccumulatorOverflowISR(void) ISR TEXT;
 
 extern DecoderStats decoderStats_g;
