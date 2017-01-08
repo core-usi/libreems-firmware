@@ -94,7 +94,7 @@ typedef struct {
   uint16_t RPM;   ///< Revolutions Per Minute (Calced) : 0.0 - 32767.5        (0.5 RPM (/2))
   uint16_t FuelPressure;  ///< Delta RPM (Calced)              : 0.0 - 32767.5        (0.5 RPM/Second (/2))
   uint16_t EthanolPercentage;
-
+  uint16_t currentEngineAngle;
 } CoreVar;
 
 
@@ -113,7 +113,7 @@ typedef struct {
 
   uint16_t FuelDensity;
   uint16_t ETE;            ///< Engine Temperature Enrichment percentage correction divide by 327.68 for 0 - 200%
-  int16_t TFCTotal;         ///< Transient fuel correction PW (+/-) divide by PW_TICK_FACTOR for milli seconds
+   int16_t TFCTotal;       ///< Transient fuel correction PW (+/-) divide by PW_TICK_FACTOR for milli seconds
 
   uint16_t Displacement;   /* Combustion displacement per unit/cyl */
   uint16_t IDT;            ///< PW duration before fuel flow begins, before per channel corrections, divide by PW_TICK_FACTOR for milli seconds
@@ -162,6 +162,7 @@ typedef struct {
   uint16_t fuelingDelta;
   uint16_t CANbytesRx;
   uint16_t CANframesRx;
+  uint16_t engineOilPressure;
   uint8_t ignitionCuts;  ///< Up to 8 reasons to not schedule ignition
   uint8_t injectionCuts; ///< Up to 8 reasons to not schedule injection
 

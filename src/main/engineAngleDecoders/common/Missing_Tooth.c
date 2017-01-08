@@ -182,8 +182,8 @@ void PrimaryEngineAngle() {
 			ratioBetweenCurrentAndLast = ratio16(previousPrimaryTicksPerDegree, ticksPerDegree, DECODER_STAMP_RATIO_F);
 			decoderStats_g.primaryInputVariance  = ratioBetweenCurrentAndLast; /* Record raw when not synced */
 
-			/* Default to cranking tollerance, when not in sync */
-			uint16_t allowedTollerance = Config.tachDecoderSettings.inputEventCrankingTollerance;
+			/* Lookup sync tolerance, when not in sync */
+			uint16_t allowedTollerance = Config.tachDecoderSettings.syncSearchTollerance;
 
 			//TODO add additional checks for correct TPD direction
 		  /* Greater than for missing tooth, less than for added tooth */

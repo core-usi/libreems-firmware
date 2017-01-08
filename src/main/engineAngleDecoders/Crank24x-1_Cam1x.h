@@ -42,7 +42,12 @@
 #define ANGLE_BETWEEN_TEETH         ENGINE_ANGLE_S((360 / TOTAL_CRANK_TEETH))
 
 static inline uint16_t getAngle(uint8_t index) {
-	return (index * ANGLE_BETWEEN_TEETH);
+  uint16_t angleAdder = 0;
+
+  if (index > TOTAL_CRANK_INDEXES) {
+    angleAdder = ANGLE_BETWEEN_TEETH * MISSING_CRANK_TEETH;
+  }
+  return ((index * ANGLE_BETWEEN_TEETH) + angleAdder);
 }
 
 #endif

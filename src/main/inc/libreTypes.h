@@ -161,7 +161,7 @@ typedef union {
 typedef struct {
   uint8_t actionBits;     /* Flags for various states */
   uint8_t regMask;
-    uint16_t regAddress;
+  uint16_t regAddress;
   counter32 downCounter;  /* RAM variable containing a TTL countdown value */
   uint16_t lastRunStamp;  /* variable containing the last TCNT stamp */
 } outputAction;

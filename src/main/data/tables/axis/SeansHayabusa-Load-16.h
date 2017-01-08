@@ -1,6 +1,6 @@
 /* LibreEMS - the community driven open source engine management system
  *
- * Copyright 2014-2016 Sean Keys, David J. Andruczyk
+ * Copyright Sean Keys
  *
  * This file is part of the LibreEMS project.
  *
@@ -17,32 +17,34 @@
  * You should have received a copy of the GNU General Public License
  * along with any LibreEMS software.  If not, see http://www.gnu.org/licenses/
  *
+ * We ask that if you make any changes to this file you email them upstream to
+ * us at admin(at)libreems(dot)org or, even better, fork the code on gitlab.com!
+ *
  * Thank you for choosing LibreEMS to run your engine!
  */
 
 
 /** @file
  *
- * @ingroup TODO
+ * @ingroup dataInitialisers
  *
- * @brief TODO
- *
- *
+ * @brief The MAP Load axis values for SEANKLT1.
  */
 
-#ifndef FILE_COREVARDESCRIPTORS_H_SEEN
-#define FILE_COREVARDESCRIPTORS_H_SEEN
 
-#include "memory.h"
-
-
-/* Names */
-const int8_t CVD_ENGINE_ANGLE_LOG[] CVD_NAME_PAGE = "Current Engine Angle";
-
-/* Descriptions */
-const int8_t CVD_ENGINE_ANGLE[] CVD_DESC_PAGE = "Non Synchronous Capture Of Engine Angle";
-
-
-#endif
-/* ex: set tabstop=2 shiftwidth=2 expandtab softtabstop=2: */
-
+ KPA(15),
+ KPA(20),
+ KPA(30),
+ KPA(45),
+ KPA(60),
+ KPA(75),
+ KPA(90),
+KPA(105),
+KPA(120),
+KPA(135),
+KPA(150),
+KPA(165),
+KPA(180),
+KPA(195),
+KPA(200),
+KPA(225)

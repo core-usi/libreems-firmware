@@ -82,6 +82,7 @@
 #include "inc/commsUtils.h"
 #include "inc/globals.h"
 #include "engineAngleDecoders/common/interface.h"
+#include "inc/printf.h"
 
 #define BENCH_TEST_NAME "BenchTest"
 
@@ -457,6 +458,7 @@ void decodePacketAndRespond(){
          BTpatternParemeterSet.channel = *((uint8_t *) RXBufferCurrentPosition);
          RXBufferCurrentPosition += sizeof(uint8_t);
          BTpatternParemeterSet.numberOfEvents = *((uint8_t *) RXBufferCurrentPosition);
+         tfp_printf("Output Test Sequence Received");
        break;
   // FreeEMS Core Comms Interface cases
     case REQUEST_INTERFACE_VERSION:

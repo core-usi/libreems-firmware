@@ -28,6 +28,7 @@
  */
 
 #include "interface.h"
+#include "../../inc/interrupts.h"
 #include "../../inc/mathFunctions.h"
 
 
@@ -50,10 +51,10 @@ void resetDecoderStatus(uint8_t reasonCode) {
   decoderStats_g.eventLockWasLost        = decoderStats_g.currentPrimaryEvent;
   decoderStats_g.RPM                     = 0;
   decoderStats_g.lockLossCauseID         = reasonCode;
-  ++decoderStats_g.decoderResetCalls;
 
   if (reasonCode != PRIMARY_INPUT_TIMEOUT) {
     decoderStats_g.requiredSyncCycles      = 2;
+    ++decoderStats_g.decoderResetCalls;
   }
 
   setCalcRequiredFlag();
@@ -64,3 +65,34 @@ void resetDecoderStatus(uint8_t reasonCode) {
 DecoderStats* getDecoderStats() {
   return &decoderStats_g;
 }
+
+/* Get instant engine angle.
+ * We should likely move instant angle into
+ * the getDecoderStats() function.
+ */
+uint16_t getInstantAngle(void) {
+  DecoderStats *decoderStats = getDecoderStats();
+  DecoderStats decoderStatsCopy;
+
+  /* Get current timestamp taking into account the overflow counter */
+  ExtendedTime currentTimeStamp;
+
+  ATOMIC_START();
+  currentTimeStamp.timeWord[1] = TCNT;
+  currentTimeStamp.timeWord[0] = timerExtensionCounter_g;
+  memcpy(&decoderStatsCopy, decoderStats, sizeof(decoderStatsCopy));
+  ATOMIC_END();
+
+  uint16_t currentAngle = getAngle(decoderStatsCopy.currentPrimaryEvent);
+  currentAngle = offsetAngle(currentAngle,
+      -(Config.mechanicalProperties.decoderInputAngleOffset));
+
+  uint32_t elapsedTime = diffUint32(currentTimeStamp.time,
+      decoderStatsCopy.lastPrimaryTimeStamp.time);
+  uint16_t degreesSinceLastInput = (elapsedTime * TICKS_PER_DEGREE_MULTIPLIER)
+      / decoderStatsCopy.instantTicksPerDegree;
+  uint16_t angle = angleAdd(currentAngle, degreesSinceLastInput);
+
+  return angle;
+}
+

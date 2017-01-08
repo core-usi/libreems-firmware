@@ -473,6 +473,12 @@ void updateCoreData(MasterConfig *config) {
       IGNITION_ADVANCE_TABLE_MAIN_LOCATION_ID);
 
   DerivedVars->Lambda = lookupMainTable(CoreVars->RPM, DerivedVars->LoadMain, LAMBDA_TABLE_LOCATION_ID);
+
+  /* Attach the current engine angle to the non synchronous data. This
+   * information is very handy for optimizing sample angles etc.
+   */
+  CoreVars->currentEngineAngle = getInstantAngle();
+
 }
 
 #endif

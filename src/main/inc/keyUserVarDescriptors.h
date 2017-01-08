@@ -54,7 +54,7 @@ const int8_t KUVD_CLOCKIN8THSOFAMILLI[] KUVD_NAME_PAGE = "clockIn8thsofAMilli ";
 const int8_t KUVD_FUELING_DELTA[] KUVD_NAME_PAGE = "Fueling Delta";
 const int8_t KUVD_CAN_RX_BYTES[] KUVD_NAME_PAGE = "CAN RX Bytes";
 const int8_t KUVD_CAN_RX_FRAMES[] KUVD_NAME_PAGE = "CAN RX Frames";
-
+const int8_t KUVD_OIL_PRESSURE_LOG[] KUVD_NAME_PAGE = "Engine Oil Pressure";
 
 /* Descriptions */
 const int8_t KUVD_THE_NUMBER_OF_DATALOGS_SENT[] KUVD_DESC_PAGE = "The number of datalogs sent";
@@ -78,6 +78,7 @@ const int8_t KUVD_INJETION_CUTS[] KUVD_DESC_PAGE = "Injetion Cuts";
 const int8_t KUVD_FUELING_DELTA_BETWEEN_FUELING_EVENTS_IN_SCALED_PERCENTAGE[] KUVD_DESC_PAGE = "Fueling delta between fueling events in scaled percentage";
 const int8_t KUVD_NUMBER_OF_BYTES_RECEIVED_ON_THE_CAN_BUSES[] KUVD_DESC_PAGE = "Number of bytes received on the CAN buses";
 const int8_t KUVD_NUMBER_OF_FRAMES_RECEIVED_ON_CAN_BUS_0[] KUVD_DESC_PAGE = "Number of Frames received on CAN bus 0";
+const int8_t KUVD_OIL_PRESSURE[] KUVD_DESC_PAGE = "Engine Oil Pressure";
 
 #endif
 /* ex: set tabstop=2 shiftwidth=2 expandtab softtabstop=2: */

@@ -39,6 +39,7 @@ MasterConfig Config CONFIG_DATA = {
     .tachDecoderSettings = {
         .inputEventTollerance         = TACH_INPUT_RATIO(PRIMARY_INPUT_TOLLERANCE),
         .inputEventCrankingTollerance = TACH_INPUT_RATIO(PRIMARY_INPUT_TOLLERANCE_CRANKING),
+        .syncSearchTollerance         = TACH_INPUT_RATIO(SYNC_SEARCH_TOLLERANCE),
         .primaryEventSkipEdges        = PRIMARY_SKIP_EDGES,
         .maxCrankingRPM               = RPM_S(MAX_RPM_CRANKING),
         .filterBypassRPM              = RPM_S(FILTER_ENABLE_RPM),
