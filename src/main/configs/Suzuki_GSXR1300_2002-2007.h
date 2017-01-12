@@ -50,7 +50,7 @@
 #define PRIMARY_SKIP_EDGES                  0
 #define PRIMARY_INPUT_TOLLERANCE           80.0   /* Difference allowed in percentage */
 #define PRIMARY_INPUT_TOLLERANCE_CRANKING  20.0   /* Difference allowed in percentage */
-#define SYNC_SEARCH_TOLLERANCE             70.0   /* A logic analyzer is needed to find this */
+#define SYNC_SEARCH_TOLLERANCE             50.0   /* A logic analyzer is needed to find this */
 
 #define FILTER_ENABLE_RPM                 MAX_RPM_CRANKING  /* RPM to start filtering tach signal */
 #define MIN_SYNC_REQUIRED                 CRANK_AND_CAM
@@ -84,10 +84,10 @@
 #define VSS_DIVISOR                 30
 
 /* WARNING capture edges may be over written by decoder */
-#define ECT0_CAPTURE_RISING         FALSE
-#define ECT0_CAPTURE_FALLING        TRUE
-#define ECT1_CAPTURE_RISING         FALSE
-#define ECT1_CAPTURE_FALLING        TRUE
+#define ECT0_CAPTURE_RISING         TRUE
+#define ECT0_CAPTURE_FALLING        FALSE
+#define ECT1_CAPTURE_RISING         TRUE
+#define ECT1_CAPTURE_FALLING        FALSE
 #define ECT2_CAPTURE_RISING         TRUE
 #define ECT2_CAPTURE_FALLING        TRUE
 #define ECT3_CAPTURE_RISING         TRUE
@@ -135,28 +135,28 @@
  *
  */
 
-#define CYL_1_TDC_ANGLE             105         /* TDC angle */
+#define CYL_1_TDC_ANGLE             465         /* TDC angle */
 #define CYL_1_INJ_ANGLE             135         /* Angle to inject Fuel */
 #define CYL_1_READ_ANGLE            135         /* Angle to sample sensors */
 #define CYL_1_IGN_CH                0           /* XGate ignition channel  */
 #define CYL_1_PRIMARY_INJ_CH        4           /* XGate primary fuel channel */
 #define CYL_1_SECONDARY_INJ_CH      8           /* XGate secondary fuel channel */
 
-#define CYL_2_TDC_ANGLE             285         /* TDC angle */
+#define CYL_2_TDC_ANGLE             645         /* TDC angle */
 #define CYL_2_INJ_ANGLE             135         /* Angle to inject Fuel */
 #define CYL_2_READ_ANGLE            135         /* Angle to sample sensors */
 #define CYL_2_IGN_CH                1           /* XGate ignition channel */
 #define CYL_2_PRIMARY_INJ_CH        5           /* XGate primary fuel channel */
 #define CYL_2_SECONDARY_INJ_CH      9           /* XGate secondary fuel channel */
 
-#define CYL_3_TDC_ANGLE             645         /* TDC angle */
+#define CYL_3_TDC_ANGLE             285         /* TDC angle */
 #define CYL_3_INJ_ANGLE             135         /* Angle to inject Fuel */
 #define CYL_3_READ_ANGLE            135         /* Angle to sample sensors */
 #define CYL_3_IGN_CH                2           /* XGate ignition channel */
 #define CYL_3_PRIMARY_INJ_CH        6           /* XGate primary fuel channel */
 #define CYL_3_SECONDARY_INJ_CH      10          /* XGate secondary fuel channel */
 
-#define CYL_4_TDC_ANGLE             465          /* TDC angle */
+#define CYL_4_TDC_ANGLE             105          /* TDC angle */
 #define CYL_4_INJ_ANGLE             135         /* Angle to inject Fuel */
 #define CYL_4_READ_ANGLE            135         /* Angle to sample sensors */
 #define CYL_4_IGN_CH                3           /* XGate ignition channel */
