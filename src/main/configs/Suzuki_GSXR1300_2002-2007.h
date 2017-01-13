@@ -48,9 +48,9 @@
 
 #define MAX_RPM_CRANKING                 1000.0     /* Max RPM at which the ECU will consider it to be in cranking mode */
 #define PRIMARY_SKIP_EDGES                  0
-#define PRIMARY_INPUT_TOLLERANCE           80.0   /* Difference allowed in percentage */
+#define PRIMARY_INPUT_TOLLERANCE           85.0   /* Difference allowed in percentage */
 #define PRIMARY_INPUT_TOLLERANCE_CRANKING  20.0   /* Difference allowed in percentage */
-#define SYNC_SEARCH_TOLLERANCE             50.0   /* A logic analyzer is needed to find this */
+#define SYNC_SEARCH_TOLLERANCE             90.0   /* A logic analyzer is needed to find this */
 
 #define FILTER_ENABLE_RPM                 MAX_RPM_CRANKING  /* RPM to start filtering tach signal */
 #define MIN_SYNC_REQUIRED                 CRANK_AND_CAM

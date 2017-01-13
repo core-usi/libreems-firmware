@@ -182,49 +182,51 @@ void PrimaryEngineAngle() {
 			ratioBetweenCurrentAndLast = ratio16(previousPrimaryTicksPerDegree, ticksPerDegree, DECODER_STAMP_RATIO_F);
 			decoderStats_g.primaryInputVariance  = ratioBetweenCurrentAndLast; /* Record raw when not synced */
 
-			/* Lookup sync tolerance, when not in sync */
-			uint16_t allowedTollerance = Config.tachDecoderSettings.syncSearchTollerance;
+			/* Lookup sync tolerance, when not in sync. If you specify a sync
+			 * tolerance of 90%, then you are telling the decoder that your
+			 * sync window needs to be between 45-55% .
+			 */
+			uint16_t syncWindowLowerBoundary = Config.tachDecoderSettings.syncSearchTollerance / (1 + MISSING_CRANK_TEETH);
+			uint16_t syncWindowUpperBoundary = TACH_INPUT_RATIO(100.00) / (1 + MISSING_CRANK_TEETH);
+			syncWindowUpperBoundary += syncWindowUpperBoundary - syncWindowLowerBoundary;
 
 			//TODO add additional checks for correct TPD direction
 		  /* Greater than for missing tooth, less than for added tooth */
-      if (ratioBetweenCurrentAndLast < allowedTollerance) {
+      if (ratioBetweenCurrentAndLast >= syncWindowLowerBoundary &&
+          ratioBetweenCurrentAndLast <= syncWindowUpperBoundary) {
         /* see if we have seen a min number of skip teeth */
         if (consecutiveEvenTeethFound > 3) {
           /* Correct ticks per degree */
-          uint16_t ticksPerDegreeAdjusted = ticksPerDegree
-              / (MISSING_CRANK_TEETH + 1);
-          /* Recalc TPD */
-          ratioBetweenCurrentAndLast = ratio16(previousPrimaryTicksPerDegree,
-              ticksPerDegreeAdjusted, DECODER_STAMP_RATIO_F);
-          /* Here we apply an allowed tolerance scaler.
-           * If we go over a missing tooth and our tolerance is say 10%,
-           * then we should allow 20% for the next physical tooth(10+10),
-           * since we moved twice as many crank degrees.
-           */
-          uint16_t adjustedTollerance = TACH_INPUT_RATIO(100.0);
-          adjustedTollerance -= (adjustedTollerance - allowedTollerance) * (1 + MISSING_CRANK_TEETH);
+          ticksPerDegree /= (MISSING_CRANK_TEETH + 1);
 
-          if (ratioBetweenCurrentAndLast < adjustedTollerance) {
-            if (ticksPerDegreeAdjusted < previousPrimaryTicksPerDegree) {
-              resetDecoderStatus(PRIMARY_EVENT_TOO_SOON_UNSYNC);
-            } else {
-              resetDecoderStatus(PRIMARY_EVENT_TOO_LATE_UNSYNC);
-            }
-            return;
-          } else {
-            ticksPerDegree = ticksPerDegreeAdjusted;
-            decoderStats_g.decoderFlags.bits.crankLock = 1;
-            if (Config.tachDecoderSettings.minimalSyncRequired == CRANK_ONLY) {
-              decoderStats_g.decoderFlags.bits.minimalSync = 1;
-            }
-            decoderStats_g.currentPrimaryEvent = 0;
+          decoderStats_g.decoderFlags.bits.crankLock = 1;
+          if (Config.tachDecoderSettings.minimalSyncRequired == CRANK_ONLY) {
+            decoderStats_g.decoderFlags.bits.minimalSync = 1;
           }
+          decoderStats_g.currentPrimaryEvent = 0;
+
         } else {
           consecutiveEvenTeethFound = 0;
         }
 
       } else {
-				++consecutiveEvenTeethFound;
+        /* TODO (skeys) we may want some constraint here to qualify
+         * a valid "even tooth".
+         */
+        if (ratioBetweenCurrentAndLast >= Config.tachDecoderSettings.inputEventCrankingTollerance) {
+          ++consecutiveEvenTeethFound;
+        } else {
+          consecutiveEvenTeethFound = 0;
+          if (previousPrimaryTicksPerDegree < ticksPerDegree) {
+            decoderStats_g.lockLossCauseID = PRIMARY_EVENT_TOO_SOON_UNSYNC;
+          } else {
+            decoderStats_g.lockLossCauseID = PRIMARY_EVENT_TOO_LATE_UNSYNC;
+          }
+        }
+
+				/* TODO (skeys) we may want to clear the tooth count if we
+				 * get a window that's below the cranking threshold.
+				 */
 			}
 			decoderStats_g.instantTicksPerDegree = ticksPerDegree; /* Record for cranking RPM log */
 		}
