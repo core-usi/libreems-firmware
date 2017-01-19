@@ -53,7 +53,7 @@ MasterConfig Config CONFIG_DATA = {
         .TPSMinimum = TPS_MINIMUM,
         .TPSMaximum = TPS_MAXIMUM
     },
-    .inputCaptureSettings = {
+    .inputCaptureSettings.inputCaptureRegs = {
 /* Bit setting seems to be broken for a union */
 //      .inputCaptureEdgesTCTL4.bits = {
 //          .ECT0captureRising  = ECT0_CAPTURE_RISING,

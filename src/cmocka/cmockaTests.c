@@ -653,6 +653,17 @@ static void testTableLookupU1632(void **state) {
   assert_int_equal(data, 4172951178);
 }
 
+static void testRatio16(void **state) {
+  (void) state;
+
+  uint16_t a = 100;
+  uint16_t b = 90;
+  uint16_t scaler = 100;
+
+  uint16_t ratio = ratio16(b, a, scaler);
+  assert_int_equal(ratio, 90);
+}
+
 int main(void) {
 
   const UnitTest tests[] = {
@@ -676,7 +687,8 @@ int main(void) {
   unit_test(testAngleOffsetMath),
   unit_test(testAngleOffsetMathNegative),
   unit_test(testTableLookupINT16),
-  unit_test(testTableLookupU1632)
+  unit_test(testTableLookupU1632),
+  unit_test(testRatio16)
   };
 
   return run_tests(tests);

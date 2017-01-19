@@ -333,8 +333,8 @@ void initECTchannels(InputCaptureSettings *settings) {
   /* Set all ECT to capture on rising and falling.
    * These settings may be overridden by the decoder.
    */
-  TCTL3 = settings->inputCaptureEdgesTCTL3.value;
-  TCTL4 = settings->inputCaptureEdgesTCTL4.value;
+  TCTL3 = settings->inputCaptureRegs.inputCaptureEdgesTCTL3.value;
+  TCTL4 = settings->inputCaptureRegs.inputCaptureEdgesTCTL4.value;
 
   TIE = 0xFF; /* enable all ECT interrupts */
 }

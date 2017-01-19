@@ -70,6 +70,13 @@ typedef struct {
   uint16_t res15           :1;
 }SensorFaults;
 
+typedef enum {
+  ECT_CAPTURE_NONE               = 0,
+  ECT_CAPTURE_RISING             = 1,
+  ECT_CAPTURE_FALLING            = 3,
+  ECT_CAPTURE_RISING_AND_FALLING = 4
+}ECTedgeConfig;
+
 typedef union {
   uint32_t time;
   uint16_t timeWord[2];
