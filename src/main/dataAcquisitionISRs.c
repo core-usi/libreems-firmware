@@ -47,7 +47,7 @@
                                                                \
   uint8_t isPinHigh = PTIT & (1 << CH);                        \
   /* TODO add config for polarity setting */                   \
-  updateCapturedInput(isPinHigh, &capturedInputData_g[TC##CH##_DATA_INDEX], &savedStamp, &timeStamp); \
+  updateCapturedInput(isPinHigh, CH, &capturedInputData_g[TC##CH##_DATA_INDEX], &savedStamp, &timeStamp); \
   savedStamp.time = timeStamp.time;                            \
   TFLG1 = (1 << CH);    /* Clear Interrupt Last */
 

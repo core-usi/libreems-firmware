@@ -96,8 +96,8 @@
 #define ECT4_CAPTURE_FALLING        TRUE  /* No effect reserved by XGate */
 #define ECT5_CAPTURE_RISING         TRUE
 #define ECT5_CAPTURE_FALLING        TRUE
-#define ECT6_CAPTURE_RISING         TRUE
-#define ECT6_CAPTURE_FALLING        TRUE
+#define ECT6_CAPTURE_RISING         FALSE /* MAF 255-12KHz, in DC mode with a 9926 */
+#define ECT6_CAPTURE_FALLING        TRUE  /* TODO consider xgate ISR */
 #define ECT7_CAPTURE_RISING         TRUE
 #define ECT7_CAPTURE_FALLING        TRUE
 

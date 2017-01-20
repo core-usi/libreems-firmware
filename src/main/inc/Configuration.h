@@ -196,15 +196,15 @@ typedef struct{
 }GPIOChannelFlags;              /* sizeof() reports 1 byte */
 
 typedef struct GPoutput{
-  uint16_t *varPointer;       /* Pointer to the register or variable containing the upper or lower trigger value */
+  uint16_t    *varPointer;       /* Pointer to the register or variable containing the upper or lower trigger value */
   InputAction inputAction;    /* Pointer to the function to be called when an input pin changes */
-  uint16_t upperBoundary;
-  uint16_t lowerBoundary;
-    uint8_t  childIndex;        /* If event has a child, its child index should be here, if not this index should match the GPIO position */
-  uint8_t  conditionCount;    /* Number of conditions that must be true */
-  uint8_t  *reg;              /* Destination register/port */
-  uint8_t  mask;              /* Bit mask to apply */
-  uint8_t derateLevel;
+  uint16_t    upperBoundary;
+  uint16_t    lowerBoundary;
+  uint8_t     childIndex;        /* If event has a child, its child index should be here, if not this index should match the GPIO position */
+  uint8_t     conditionCount;    /* Number of conditions that must be true */
+  uint8_t     *reg;              /* Destination register/port */
+  uint8_t     mask;              /* Bit mask to apply */
+  uint8_t     derateLevel;
   GPIOChannelFlags flags;     /* Polarity, Direction,  etc. */
 }GPIOchannel;
 
@@ -255,16 +255,20 @@ typedef struct {
   uint8_t ECT0normal :1;
 }ReportPolarity_bits;
 
-typedef union {
-  ReportPolarity_bits bits;
-  uint8_t value;
-}ReportPolarity;
+//typedef union {
+//  ReportPolarity_bits bits;
+//  uint8_t value;
+//}ReportPolarity;
 
-
+/* In reg space 4 represents 0-3, 3 4-7 */
 typedef struct {
   InputCaptureEdgesTCTL4 inputCaptureEdgesTCTL4;
   InputCaptureEdgesTCTL3 inputCaptureEdgesTCTL3;
-  ReportPolarity    reportPolarity;
+}InputCaptureRegs;
+
+typedef union {
+  InputCaptureRegs inputCaptureRegs;
+  uint16_t         inputCaptureValues;
 }InputCaptureSettings;
 
 typedef struct{

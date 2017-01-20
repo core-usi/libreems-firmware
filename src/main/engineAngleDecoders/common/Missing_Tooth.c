@@ -210,8 +210,7 @@ void PrimaryEngineAngle() {
         }
 
       } else {
-        /* TODO (skeys) we may want some constraint here to qualify
-         * a valid "even tooth".
+        /* Find even teeth here.
          */
         if (ratioBetweenCurrentAndLast >= Config.tachDecoderSettings.inputEventCrankingTollerance) {
           ++consecutiveEvenTeethFound;
@@ -223,10 +222,6 @@ void PrimaryEngineAngle() {
             decoderStats_g.lockLossCauseID = PRIMARY_EVENT_TOO_LATE_UNSYNC;
           }
         }
-
-				/* TODO (skeys) we may want to clear the tooth count if we
-				 * get a window that's below the cranking threshold.
-				 */
 			}
 			decoderStats_g.instantTicksPerDegree = ticksPerDegree; /* Record for cranking RPM log */
 		}

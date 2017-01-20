@@ -46,7 +46,8 @@ inline void readRTADCValues(SyncedData *buffer) TEXT;
 inline uint8_t updateAngleDependantData(DecoderStats *decoderStats, uint8_t numOutputs, CylinderConfig*) TEXT;
 void sampleAllSyncData() TEXT;
 uint8_t readFlexFuelEth() TEXT;
-void updateCapturedInput(uint8_t flags, CapturedInputData *dataStore, ExtendedTime *previousStamp, ExtendedTime *captureStamp) TEXT;
+void updateCapturedInput(uint8_t flags, uint8_t channel, CapturedInputData *dataStore,
+    ExtendedTime *previousStamp, ExtendedTime *captureStamp) TEXT;
 
 #else
 

@@ -108,7 +108,8 @@ uint8_t readFlexFuelEth() {
     return frequency;
 }
 
-void updateCapturedInput(uint8_t edge, CapturedInputData *dataStore, ExtendedTime *previousStamp, ExtendedTime *captureStamp) {
+void updateCapturedInput(uint8_t edgeState, uint8_t channel, CapturedInputData *dataStore,
+                         ExtendedTime *previousStamp, ExtendedTime *captureStamp) {
   ++dataStore->ISRcount;
   /* Update Angle Data */
   DecoderStats *decoderStats = getDecoderStats();
@@ -121,7 +122,7 @@ void updateCapturedInput(uint8_t edge, CapturedInputData *dataStore, ExtendedTim
   uint16_t pw = diffUint32(captureStamp->time, previousStamp->time);
 
   /* Is edge high? */
-  if (edge == 0) {
+  if (edgeState == 0) {
     dataStore->periodHighTicks = pw;
     /* Update Angle Data */
     dataStore->capturedAngleHigh = angle;
@@ -129,9 +130,26 @@ void updateCapturedInput(uint8_t edge, CapturedInputData *dataStore, ExtendedTim
     dataStore->periodLowTicks = pw;
     dataStore->capturedAngleLow = angle;
   }
-  /* calc frequency */
-  dataStore->frequencyHz = ((uint32_t)TICKS_PER_SECOND) /
-      ((uint32_t)dataStore->periodLowTicks + dataStore->periodHighTicks);
-  previousStamp->time = captureStamp->time;
+
+  /* Check if we are capturing on both rising and falling edges */
+  uint8_t configMask;
+  if (channel > 3) {
+    channel -= 4;
+    configMask = Config.inputCaptureSettings.inputCaptureRegs.inputCaptureEdgesTCTL3.value >>
+        (channel * 2);
+  } else {
+    configMask = Config.inputCaptureSettings.inputCaptureRegs.inputCaptureEdgesTCTL4.value >>
+        (channel * 2);
+  }
+
+  configMask &= (BIT0 | BIT1);
+
+  if (configMask == (BIT0 | BIT1)) {
+    dataStore->frequencyHz = ((uint32_t)TICKS_PER_SECOND) /
+        ((uint32_t)dataStore->periodLowTicks + dataStore->periodHighTicks);
+  } else {
+    dataStore->frequencyHz = ((uint32_t)TICKS_PER_SECOND) / diffUint32(captureStamp->time,
+        previousStamp->time);
+  }
 
 }

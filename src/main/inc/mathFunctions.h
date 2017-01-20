@@ -63,7 +63,7 @@ inline uint16_t diffUint16(uint16_t head, uint16_t tail) {
 }
 
 static
-inline uint8_t diffUint8(uint8_t head, uint8_t tail) {
+inline uint8_t diffUint8(const uint8_t head, const uint8_t tail) {
   if(head >= tail) {
     return head - tail;
   } else {
@@ -72,7 +72,7 @@ inline uint8_t diffUint8(uint8_t head, uint8_t tail) {
 }
 
 static
-inline uint32_t diffUint32(uint32_t head, uint32_t tail) {
+inline uint32_t diffUint32(const uint32_t head, const uint32_t tail) {
   if(head >= tail) {
     return head - tail;
   } else {
@@ -81,7 +81,7 @@ inline uint32_t diffUint32(uint32_t head, uint32_t tail) {
 }
 
 static
-inline uint16_t angleAdd(uint16_t angle1, uint16_t angle2) {
+inline uint16_t angleAdd(const uint16_t angle1, const uint16_t angle2) {
   uint32_t angle = angle1 + angle2;
 
   if (angle >= ENGINE_ANGLE_S(720)) {
@@ -92,7 +92,7 @@ inline uint16_t angleAdd(uint16_t angle1, uint16_t angle2) {
 }
 
 static
-inline uint16_t ratio16(uint16_t value1, uint16_t value2, uint16_t scaler) {
+inline uint16_t ratio16(const uint16_t value1, const uint16_t value2, const uint16_t scaler) {
   uint16_t scaledPercent;
 
   if (value1 > value2) {
