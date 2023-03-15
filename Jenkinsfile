@@ -13,10 +13,9 @@ pipeline {
                
                 
                 sh '''
-                echo $params.repo_branch
-                rm -rf libreems-firmware
-                git clone -b $params.repo_branch https://github.com/core-usi/libreems-firmware.git 
                 
+                
+                pwd
                 ls
                 cd ./libreems-firmware
                 ls
