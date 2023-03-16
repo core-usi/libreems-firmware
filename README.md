@@ -11,7 +11,7 @@ To casually follow the highlights you can subscribe to our [facebook page](http:
 
 If you're wondering why this project was forked from FreeEMS have a look at [this page](http://blogs.libreems.org/why-did-we-fork-from-freeems/)
 
-### Obtaining the firmware
+## Obtaining the firmware
 
 The best way to get the latest development firmware is from the [build server!](http://builds.libreems.org/Firmware)
 
