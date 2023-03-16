@@ -31,7 +31,7 @@ You also need an up to date version of git available on the command line.
 
 With these prerequisites met, simply type 'make' and choose an option!
 
-### Loading the firmware
+# Loading the firmware
 
 **Please note**: hcs12mem is no longer capable of loading the firmware unassisted.
 
